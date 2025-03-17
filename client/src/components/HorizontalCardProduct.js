@@ -9,7 +9,6 @@ const ProductCard = lazy(() => import("./ProductCard")); // Lazy Loading
 export default function HorizontalCardProduct({ category, heading }) {
   const [loading, setLoading] = useState(true);
   const [categories, setCategories] = useState([]);
-  const [error, setError] = useState(false);
 
   const memoizedCategories = useMemo(() => categories, [categories]);
 
@@ -22,11 +21,9 @@ export default function HorizontalCardProduct({ category, heading }) {
         );
         setCategories(response.data.data);
         setLoading(false);
-        setError(false);
       } catch (error) {
         message.error("Failed to load products. Please try again.");
         setLoading(true);
-        setError(true);
       }
     };
 

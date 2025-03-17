@@ -36,14 +36,14 @@ const CustomCard = ({
             <img
               key={index}
               src={img}
-              alt={`Product Image ${index + 1}`}
+              alt={`Product ${index + 1}`}
               className="w-24 h-24 object-cover rounded-lg"
             />
           ))
         ) : (
           <img
             src="https://via.placeholder.com/150"
-            alt="No Image"
+            alt="No"
             className="w-24 h-24 object-cover rounded-lg"
           />
         )}

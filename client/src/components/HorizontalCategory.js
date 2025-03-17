@@ -56,7 +56,7 @@ export default function HorizontalCategory() {
             </div>
 
             {/* Category Name */}
-            <span className="mt-4 text-xs sm:text-sm md:text-base font-medium text-gray-800 transition-colors duration-200 group-hover:text-[#db4444]">
+            <span className="mt-4 text-xs sm:text-sm md:text-base font-medium text-white transition-colors duration-200 ">
               {item.name}
             </span>
           </div>

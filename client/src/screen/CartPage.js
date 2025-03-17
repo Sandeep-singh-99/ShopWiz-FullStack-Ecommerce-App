@@ -56,7 +56,7 @@ export default function CartPage() {
       message.error("Please login to continue");
       navigate("/");
     }
-  }, []);
+  }, [isAuthenticated, dispatch, navigate]);
 
   return (
     <div className="max-w-5xl mx-auto py-10 p-5">

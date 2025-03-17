@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Tabs} from "antd";
 import { useNavigate } from "react-router-dom";
 import TabPane from "antd/es/tabs/TabPane";
@@ -7,7 +7,6 @@ import User from "./User";
 import Order from "./Order";
 
 export default function AdminHome() {
-  const [mode, setMode] = useState("left");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -30,7 +29,7 @@ export default function AdminHome() {
       <div className="border-t-2 border-gray-600 pt-2">
         <Tabs
           defaultActiveKey="0"
-          tabPosition={mode}>
+          tabPosition={"left"}>
             <TabPane tab="Product" key="0">
                 <Product/>
             </TabPane>

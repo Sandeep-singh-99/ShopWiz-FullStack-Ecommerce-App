@@ -17,7 +17,7 @@ export default function AdminLogin() {
     if (token) {
       navigate("/admin");
     }
-  }, []);
+  }, [navigate]);
 
 
 
