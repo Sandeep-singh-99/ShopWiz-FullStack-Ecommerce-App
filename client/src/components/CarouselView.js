@@ -1,107 +1,123 @@
-import React, { useEffect, useState } from 'react'
-import image1 from '../assests/img1.webp'
-import image2 from '../assests/img2.webp'
-import image3 from '../assests/img3.jpg'
-import image4 from '../assests/img4.jpg'
-import image5 from '../assests/img5.webp'
-
-
-import image1Mobile from '../assests/img1_mobile.jpg'
-import image2Mobile from '../assests/img2_mobile.webp'
-import image3Mobile from '../assests/img3_mobile.jpg'
-import image4Mobile from '../assests/img4_mobile.jpg'
-import image5Mobile from '../assests/img5_mobile.png'
-
-import { FaAngleRight } from "react-icons/fa6";
-import { FaAngleLeft } from "react-icons/fa6";
-
+import React, { useEffect, useState, useCallback } from "react";
+import image1 from "../assests/img1.webp";
+import image2 from "../assests/img2.webp";
+import image3 from "../assests/img3.jpg";
+import image4 from "../assests/img4.jpg";
+import image5 from "../assests/img5.webp";
+import image1Mobile from "../assests/img1_mobile.jpg";
+import image2Mobile from "../assests/img2_mobile.webp";
+import image3Mobile from "../assests/img3_mobile.jpg";
+import image4Mobile from "../assests/img4_mobile.jpg";
+import image5Mobile from "../assests/img5_mobile.png";
+import { FaAngleRight, FaAngleLeft } from "react-icons/fa6";
 
 const BannerProduct = () => {
-    const [currentImage,setCurrentImage] = useState(0)
+  const [currentImage, setCurrentImage] = useState(0);
 
-    const desktopImages = [
-        image1,
-        image2,
-        image3,
-        image4,
-        image5
-    ]
+  const desktopImages = [image1, image2, image3, image4, image5];
+  const mobileImages = [
+    image1Mobile,
+    image2Mobile,
+    image3Mobile,
+    image4Mobile,
+    image5Mobile,
+  ];
 
-    const mobileImages = [
-        image1Mobile,
-        image2Mobile,
-        image3Mobile,
-        image4Mobile,
-        image5Mobile
-    ]
-
-    const nextImage = () =>{
-        if(desktopImages.length - 1 > currentImage){
-            setCurrentImage(preve => preve + 1)
-        }
+  
+  const nextImage = useCallback(() => {
+    if (desktopImages.length - 1 > currentImage) {
+      setCurrentImage((prev) => prev + 1);
+    } else {
+      setCurrentImage(0);
     }
+  }, [currentImage, desktopImages.length]);
 
-    const preveImage = () =>{
-        if(currentImage !== 0){
-            setCurrentImage(preve => preve - 1)
-        }
+  const prevImage = useCallback(() => {
+    if (currentImage !== 0) {
+      setCurrentImage((prev) => prev - 1);
     }
+  }, [currentImage]);
 
+  
+  useEffect(() => {
+    const interval = setInterval(nextImage, 5000);
+    return () => clearInterval(interval);
+  }, [nextImage]);
 
-    useEffect(()=>{
-        const interval = setInterval(()=>{
-            if(desktopImages.length - 1 > currentImage){
-                nextImage()
-            }else{
-                setCurrentImage(0)
-            }
-        },5000)
-
-        return ()=> clearInterval(interval)
-    },[currentImage])
+  
+  useEffect(() => {
+    const nextIndex = (currentImage + 1) % desktopImages.length;
+    const preloadDesktop = new Image();
+    const preloadMobile = new Image();
+    preloadDesktop.src = desktopImages[nextIndex];
+    preloadMobile.src = mobileImages[nextIndex];
+  }, [currentImage, desktopImages, mobileImages]);
 
   return (
-    <div className='container mx-auto px-4 rounded '>
-        <div className='h-56 md:h-72 w-full bg-slate-200 relative'>
-
-                <div className='absolute z-10 h-full w-full md:flex items-center hidden '>
-                    <div className=' flex justify-between w-full text-2xl'>
-                        <button onClick={preveImage} className='bg-white shadow-md rounded-full p-1'><FaAngleLeft/></button>
-                        <button onClick={nextImage} className='bg-white shadow-md rounded-full p-1'><FaAngleRight/></button> 
-                    </div>
-                </div>
-
-                {/**desktop and tablet version */}
-              <div className='hidden md:flex h-full w-full overflow-hidden'>
-                {
-                        desktopImages.map((imageURl,index)=>{
-                            return(
-                            <div className='w-full h-full min-w-full min-h-full transition-all' key={imageURl} style={{transform : `translateX(-${currentImage * 100}%)`}}>
-                                <img rel='preload' alt='' as="image" src={imageURl} loading='lazy' className='w-full h-full'/>
-                            </div>
-                            )
-                        })
-                }
-              </div>
-
-
-                {/**mobile version */}
-                <div className='flex h-full w-full overflow-hidden md:hidden'>
-                {
-                        mobileImages.map((imageURl,index)=>{
-                            return(
-                            <div className='w-full h-full min-w-full min-h-full transition-all' key={imageURl} style={{transform : `translateX(-${currentImage * 100}%)`}}>
-                                <img rel='preload' alt='' as="image" src={imageURl} loading='lazy' className='w-full h-full object-cover'/>
-                            </div>
-                            )
-                        })
-                }
-              </div>
-
-
+    <div className="container mx-auto px-4 rounded">
+      <div className="h-56 md:h-72 w-full bg-slate-200 relative">
+        {/* Navigation buttons */}
+        <div className="absolute z-10 h-full w-full md:flex items-center hidden">
+          <div className="flex justify-between w-full text-2xl">
+            <button
+              onClick={prevImage}
+              className="bg-white shadow-md rounded-full p-1"
+              aria-label="Previous image"
+            >
+              <FaAngleLeft />
+            </button>
+            <button
+              onClick={nextImage}
+              className="bg-white shadow-md rounded-full p-1"
+              aria-label="Next image"
+            >
+              <FaAngleRight />
+            </button>
+          </div>
         </div>
-    </div>
-  )
-}
 
-export default BannerProduct
+        {/* Desktop version */}
+        <div className="hidden md:flex h-full w-full overflow-hidden">
+          {desktopImages.map((imageUrl, index) => (
+            <div
+              key={`desktop-${index}`}
+              className="w-full h-full min-w-full min-h-full transition-all"
+              style={{ transform: `translateX(-${currentImage * 100}%)` }}
+            >
+              <img
+                src={imageUrl}
+                alt={`Banner ${index + 1}`}
+                loading={index === 0 ? "eager" : "lazy"} 
+                decoding="async"
+                className="w-full h-full object-cover"
+                fetchpriority={index === 0 ? "high" : "low"} 
+              />
+            </div>
+          ))}
+        </div>
+
+        {/* Mobile version */}
+        <div className="flex h-full w-full overflow-hidden md:hidden">
+          {mobileImages.map((imageUrl, index) => (
+            <div
+              key={`mobile-${index}`}
+              className="w-full h-full min-w-full min-h-full transition-all"
+              style={{ transform: `translateX(-${currentImage * 100}%)` }}
+            >
+              <img
+                src={imageUrl}
+                alt={`Banner ${index + 1}`}
+                loading={index === 0 ? "eager" : "lazy"}
+                decoding="async"
+                className="w-full h-full object-cover"
+                fetchpriority={index === 0 ? "high" : "low"}
+              />
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default BannerProduct;
