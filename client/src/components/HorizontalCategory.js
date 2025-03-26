@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-// Import Category Images
+
 import img1 from "../assests/category/mouse.webp";
 import img2 from "../assests/category/airpodes.webp";
 import img3 from "../assests/category/camera.jpg";
@@ -34,20 +34,23 @@ export default function HorizontalCategory() {
   ];
 
   return (
-    <div className="container mx-auto py-6 px-4 md:px-8 lg:px-16">
-      {/* Grid Layout for better responsiveness */}
-      <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-6 xl:grid-cols-6 gap-6">
+    <div className="container mx-auto py-4 px-2 sm:px-4 md:px-8 lg:px-16">
+      {/* Scrollable horizontal layout for mobile with hidden scrollbar, grid for larger screens */}
+      <div
+        className="flex overflow-x-auto space-x-4 pb-4 sm:grid sm:grid-cols-3 sm:gap-4 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-6 sm:space-x-0 sm:overflow-x-hidden 
+        scrollbar-hide"
+      >
         {categories.map((item) => (
           <div
             key={item.id}
-            className="cursor-pointer flex flex-col items-center group transition-all duration-300 ease-in-out"
+            className="flex-shrink-0 w-28 sm:w-auto cursor-pointer flex flex-col items-center group transition-all duration-300 ease-in-out hover:bg-gray-50 rounded-lg p-2"
             onClick={() => navigate(`/category/${item.name}`)}
           >
             {/* Category Image */}
-            <div className="w-32 h-32 md:w-36 md:h-36 xl:w-40 xl:h-40 bg-white shadow-lg rounded-lg overflow-hidden flex items-center justify-center transition-transform duration-300 ease-in-out group-hover:scale-105 group-hover:shadow-xl border border-gray-200">
+            <div className="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 lg:w-32 lg:h-32 bg-white shadow-md rounded-md overflow-hidden flex items-center justify-center transition-all duration-300 ease-in-out group-hover:shadow-lg group-hover:scale-105 border border-gray-100">
               <img
                 loading="lazy"
-                className="w-full h-full object-contain border border-gray-300 transition-transform duration-300 ease-in-out group-hover:scale-110"
+                className="w-full h-full object-contain p-2 transition-transform duration-300 ease-in-out group-hover:scale-110"
                 src={item.img}
                 alt={item.name}
                 width="100%"
@@ -56,7 +59,7 @@ export default function HorizontalCategory() {
             </div>
 
             {/* Category Name */}
-            <span className="mt-4 text-xs sm:text-sm md:text-base font-medium text-white transition-colors duration-200 ">
+            <span className="mt-2 text-xs sm:text-sm md:text-base font-medium text-white text-center transition-colors duration-200 group-hover:text-blue-600">
               {item.name}
             </span>
           </div>
