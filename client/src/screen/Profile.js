@@ -1,7 +1,6 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
 import { logoutAuth } from "../redux/slice/auth-slice";
 
 export default function Profile() {
@@ -16,7 +15,7 @@ export default function Profile() {
     userData = storedData ? JSON.parse(storedData) : null;
   } catch (error) {
     console.error("Error parsing loginData:", error);
-    localStorage.removeItem("loginData"); // Prevent future errors
+    localStorage.removeItem("loginData");
   }
 
   const handleLogout = () => {
@@ -25,62 +24,85 @@ export default function Profile() {
   };
 
   return (
-    <div className="flex justify-between  items-center py-16 px-5 sm:px-10">
-      {/* Profile Card */}
-      <div className="flex flex-col border-2 items-center gap-4 bg-white shadow-xl rounded-lg p-6 w-full max-w-sm">
-        {userData?.imageUrl ? (
-          <img
-            src={userData.imageUrl}
-            alt={userData.username || "User"}
-            className="h-24 w-24 rounded-full border-4 border-gray-300 object-scale-down shadow-md"
-          />
-        ) : (
-          <div className="h-24 w-24 rounded-full bg-gray-200 flex items-center justify-center text-2xl font-bold text-gray-600 border border-gray-300 shadow-md">
-            {userData?.username?.charAt(0) || "?"}
-          </div>
-        )}
-        <h1 className="text-xl font-semibold text-gray-800">
-          {userData?.username || "Guest User"}
+    <div className="min-h-screen bg-gray-100 py-10 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-5xl mx-auto">
+        {/* Header */}
+        <h1 className="text-3xl font-bold text-gray-800 mb-8 text-center">
+          Your Profile
         </h1>
-        <p className="text-gray-600">
-          {userData?.email || "No email provided"}
-        </p>
-        <p className="text-gray-500">{userData?.phone || "No phone number"}</p>
 
-        <button
-          onClick={handleLogout}
-          className="w-full bg-red-500 hover:bg-red-600 text-white font-semibold rounded-lg py-2 transition-all"
-        >
-          Logout
-        </button>
-      </div>
+        {/* Main Layout */}
+        <div className="flex flex-col lg:flex-row gap-8">
+          {/* Profile Card */}
+          <div className="bg-white rounded-xl shadow-lg p-6 w-full lg:w-1/3 flex flex-col items-center transform hover:scale-105 transition-transform duration-300">
+            {userData?.imageUrl ? (
+              <img
+                src={userData.imageUrl}
+                alt={userData.username || "User"}
+                className="h-28 w-28 rounded-full border-4 border-indigo-100 object-cover shadow-sm"
+              />
+            ) : (
+              <div className="h-28 w-28 rounded-full bg-gradient-to-br from-indigo-200 to-indigo-300 flex items-center justify-center text-4xl font-bold text-white shadow-sm">
+                {userData?.username?.charAt(0)?.toUpperCase() || "?"}
+              </div>
+            )}
+            <h2 className="mt-4 text-2xl font-semibold text-gray-900">
+              {userData?.username || "Guest User"}
+            </h2>
+            <p className="mt-1 text-sm text-gray-500">
+              {userData?.email || "No email provided"}
+            </p>
+            <p className="mt-1 text-sm text-gray-400">
+              {userData?.phone || "No phone number"}
+            </p>
+            <button
+              onClick={handleLogout}
+              className="mt-6 w-full bg-gradient-to-r from-red-500 to-red-600 text-white font-semibold rounded-lg py-2.5 hover:from-red-600 hover:to-red-700 transition-all duration-200 shadow-md"
+            >
+              Logout
+            </button>
+          </div>
 
-      {/* Cart Section */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-10 w-full max-w-2xl">
-        <div className="shadow-xl rounded-lg p-5 bg-blue-600 text-white flex flex-col gap-3">
-          <h1 className="text-lg font-semibold">Cart</h1>
-          <div className="border-b border-white"></div>
-          <div className="flex justify-between">
-            <h1>Total Items:</h1>
-            <h1>{typeof countData === "number"
+          {/* Cart & Orders Section */}
+          <div className="w-full lg:w-2/3 space-y-6">
+            {/* Cart Card */}
+            <div className="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow duration-300">
+              <div className="flex items-center justify-between">
+                <h3 className="text-xl font-semibold text-gray-800">Cart</h3>
+                <span className="bg-indigo-100 text-indigo-700 text-sm font-medium px-2.5 py-0.5 rounded-full">
+                  {typeof countData === "number"
                     ? countData
-                    : countData?.data || 0}</h1>
-          </div>
-          <Link to={"/cart"} className="w-full text-center bg-white text-blue-600 font-semibold rounded-lg py-2 hover:bg-gray-200 transition-all">
-            View Cart
-          </Link>
-        </div>
+                    : countData?.data || 0}{" "}
+                  Items
+                </span>
+              </div>
+              <div className="mt-4 border-t border-gray-200 pt-4 flex flex-col sm:flex-row justify-between items-center gap-4">
+                <p className="text-gray-600">Manage your shopping cart</p>
+                <Link
+                  to="/cart"
+                  className="w-full sm:w-auto bg-indigo-600 text-white font-semibold rounded-lg py-2 px-4 hover:bg-indigo-700 transition-all duration-200 shadow-sm"
+                >
+                  View Cart
+                </Link>
+              </div>
+            </div>
 
-        <div className="shadow-xl rounded-lg p-5 bg-purple-600 text-white flex flex-col gap-3">
-          <h1 className="text-lg font-semibold">Orders</h1>
-          <div className="border-b border-white"></div>
-          <div className="flex justify-between">
-            <h1>Total Orders:</h1>
-            <h1>0</h1>
+            {/* Orders Card */}
+            <div className="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow duration-300">
+              <div className="flex items-center justify-between">
+                <h3 className="text-xl font-semibold text-gray-800">Orders</h3>
+                <span className="bg-purple-100 text-purple-700 text-sm font-medium px-2.5 py-0.5 rounded-full">
+                  0 Orders
+                </span>
+              </div>
+              <div className="mt-4 border-t border-gray-200 pt-4 flex flex-col sm:flex-row justify-between items-center gap-4">
+                <p className="text-gray-600">Track your order history</p>
+                <button className="w-full sm:w-auto bg-purple-600 text-white font-semibold rounded-lg py-2 px-4 hover:bg-purple-700 transition-all duration-200 shadow-sm">
+                  View Orders
+                </button>
+              </div>
+            </div>
           </div>
-          <button className="w-full bg-white text-purple-600 font-semibold rounded-lg py-2 hover:bg-gray-200 transition-all">
-            View Orders
-          </button>
         </div>
       </div>
     </div>
