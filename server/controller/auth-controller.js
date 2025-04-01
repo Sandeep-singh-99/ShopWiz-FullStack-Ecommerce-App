@@ -1,5 +1,6 @@
 const Auth = require("../models/auth-model");
 const Admin = require("../models/admin-model");
+const { generateToken } = require("../config/generateToken");
 
 const register = async (req, res) => {
   try {
@@ -17,7 +18,7 @@ const register = async (req, res) => {
       });
     }
 
-    const user = await Auth.create({
+    const newUser = await Auth.create({
       email,
       password,
       username,
@@ -26,11 +27,15 @@ const register = async (req, res) => {
       cloudinaryId,
     });
 
-    res.status(200).json({
-      message: "User created successfully",
-      success: true,
-      data: user,
-    });
+    if (newUser) {
+      generateToken(newUser._id, res);
+      res.status(201).json({data: newUser, message: "User created successfully", success: true});
+    } else {
+      res.status(400).json({
+        message: "User not created",
+        success: false,
+      });
+    }
   } catch (error) {
     res.status(500).json({
       message: error.message,
@@ -62,20 +67,11 @@ const Login = async (req, res) => {
       });
     }
 
-    const accesstoken = user.generateToken()
-    
-
-    res.cookie("accesstoken", accesstoken, {
-      httpOnly: true,
-      secure: true,
-      sameSite: "none",
-      maxAge: 2 * 60 * 60 * 1000 //1800000, // 1 hour
-    });
-
+    generateToken(user._id, res);
     res.status(200).json({
       message: "User logged in successfully",
       success: true,
-      data: { user, accesstoken },
+      data: user
     });
   } catch (error) {
     res.status(500).json({
@@ -87,8 +83,6 @@ const Login = async (req, res) => {
 
 const Logout = async (req, res) => {
   try {
-    res.clearCookie("accesstoken");
-    res.clearCookie("refreshtoken");
     res.clearCookie("token");
     res.status(200).json({
       message: "User logged out successfully",
@@ -104,16 +98,8 @@ const Logout = async (req, res) => {
 
 const checkAuth = async (req, res) => {
     try {
-        // const user = await Auth.findById(req.user.id).select("-password");
-
-        // if (!user) {
-        //     return res.status(400).json({
-        //         message: "User not found",
-        //         success: false,
-        //     })
-        // }
-
         res.status(200).json({
+            data: req.user,
             message: "User is authenticated",
             success: true
         })
@@ -148,38 +134,13 @@ const adminLogin = async (req, res) => {
       adminUser,
     });
   } catch (error) {
-    console.error("Login Error: ", error); // Add logging for debugging
+    console.error("Login Error: ", error); 
     res.status(500).json({
-      message: "Something went wrong. Please try again later.", // General error message for security
+      message: "Something went wrong. Please try again later.", 
       success: false,
     });
   }
 };
 
-// const refreshToken = async (req, res) => {
-//     const refreshToken = req.cookies.refreshtoken;
-
-//     if (!refreshToken) {
-//       return res.status(401).json({ message: "Unauthorized", success: false });
-//     }
-
-//     try {
-//       const decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN);
-//       const accesstoken = jwt.sign({ id: decoded.id }, process.env.JWT_SECRET, {
-//         expiresIn: "30m",
-//       });
-
-//       res.cookie("accesstoken", accesstoken, {
-//         httpOnly: true,
-//         secure: true,
-//         sameSite: "none",
-//         maxAge: 1800000,
-//       });
-
-//       res.status(200).json({ message: "Token refreshed", success: true });
-//     } catch (error) {
-//       res.status(401).json({ message: "Unauthorized", success: false });
-//     }
-//   };
 
 module.exports = { register, Login, Logout, checkAuth, adminLogin };

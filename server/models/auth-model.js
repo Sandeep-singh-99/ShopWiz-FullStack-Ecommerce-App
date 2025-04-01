@@ -1,6 +1,5 @@
 const {Schema, model} = require("mongoose");
 const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
 
 const authSchema = new Schema({
     imageUrl: {
@@ -43,11 +42,7 @@ authSchema.methods.comparePassword = async function(password) {
     return await bcrypt.compare(password, this.password)
 }
 
-authSchema.methods.generateToken = function() {
-    return jwt.sign({id: this._id}, process.env.JWT_SECRET_TOKEN, {expiresIn: "2h"})
-}
 
-
-const Auth = new model("auth", authSchema)
+const Auth = new model("Auth", authSchema)
 
 module.exports = Auth
