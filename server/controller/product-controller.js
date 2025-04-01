@@ -23,9 +23,9 @@ const addProduct = async (req, res) => {
       const imageFiles = req.files['images'];
       
       for (const file of imageFiles) {
-          if (!['image/jpeg', 'image/png'].includes(file.mimetype)) {
-              return res.status(400).json({ error: "Only JPEG and PNG allowed for images" });
-          }
+          // if (!['image/jpeg', 'image/png'].includes(file.mimetype)) {
+          //     return res.status(400).json({ error: "Only JPEG and PNG allowed for images" });
+          // }
           
           const uploadResponse = await imagekitConfig.upload({
               file: file.buffer,
@@ -161,12 +161,12 @@ const updateProduct = async (req, res) => {
 
     // Handle image update if a new file is uploaded
     if (req.file) {
-      if (!['image/jpeg', 'image/png'].includes(req.file.mimetype)) {
-        return res.status(400).json({
-          message: "Only JPEG and PNG images are allowed",
-          success: false,
-        });
-      }
+      // if (!['image/jpeg', 'image/png'].includes(req.file.mimetype)) {
+      //   return res.status(400).json({
+      //     message: "Only JPEG and PNG images are allowed",
+      //     success: false,
+      //   });
+      // }
 
       // Delete old images from ImageKit if they exist
       if (product.imageKitProductId && product.imageKitProductId.length > 0) {
