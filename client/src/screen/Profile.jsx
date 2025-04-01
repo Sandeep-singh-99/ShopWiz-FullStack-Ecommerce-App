@@ -1,7 +1,6 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { logoutAuth } from "../redux/slice/auth-slice";
 
 export default function Profile() {
   const navigate = useNavigate();
@@ -19,7 +18,6 @@ export default function Profile() {
   }
 
   const handleLogout = () => {
-    dispatch(logoutAuth());
     navigate("/");
   };
 

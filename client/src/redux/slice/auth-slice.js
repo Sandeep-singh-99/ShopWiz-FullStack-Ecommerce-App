@@ -60,6 +60,7 @@ const initialState = {
   isLoading: false,
   isAuthenticated: false, //!!localStorage.getItem("token"), // Use a boolean for clarity
   error: null,
+  user: null,
 };
 
 const authSlice = createSlice({
@@ -69,13 +70,6 @@ const authSlice = createSlice({
     login: (state, action) => {
       state.isAuthenticated = true;
       state.user = action.payload;
-      localStorage.setItem("loginData", JSON.stringify(action.payload));
-    },
-    logoutAuth: (state) => {
-      state.isAuthenticated = false;
-      state.user = null;
-      localStorage.removeItem("token");
-      localStorage.removeItem("loginData");
     },
   },
   extraReducers: (builder) => {
@@ -96,9 +90,11 @@ const authSlice = createSlice({
       })
       .addCase(logout.fulfilled, (state) => {
         state.isAuthenticated = false;
+        state.user = null;
+        state.isLoading = false;
       });
   },
 });
 
-export const { login, logoutAuth } = authSlice.actions;
+export const { login } = authSlice.actions;
 export default authSlice.reducer;

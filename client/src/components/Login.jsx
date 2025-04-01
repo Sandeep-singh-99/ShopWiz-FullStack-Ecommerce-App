@@ -34,10 +34,8 @@ export default function Login() {
       );
 
       if (response.status === 200 && response.data.success) {
-        const { data: userData } = response.data;
-        localStorage.setItem("token", userData.accesstoken);
-        localStorage.setItem("loginData", JSON.stringify(userData.user));
-        dispatch(login(userData.user));
+        const data = response.data;
+        dispatch(login(data));
         navigate("/");
         message.success("Login successful");
       } else {
@@ -48,12 +46,6 @@ export default function Login() {
       console.error("Error: ", error);
     }
   };
-
-  useEffect(() => {
-    if (localStorage.getItem("token")) {
-      navigate("/");
-    }
-  }, [navigate]);
 
   return (
     <section class="bg-gray-50 dark:bg-gray-900 h-screen">
