@@ -37,9 +37,6 @@ const addProduct = async (req, res) => {
           imageKitProductIds.push(uploadResponse.fileId);
       }
   }
-
-  console.log("Images:", images);
-  console.log("ImageKit Product IDs:", imageKitProductIds);
   
     const newProduct = await Product.create({
       productName,
