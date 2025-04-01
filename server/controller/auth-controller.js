@@ -1,12 +1,11 @@
 const Auth = require("../models/auth-model");
 const Admin = require("../models/admin-model");
-const { generateToken } = require("../config/generateToken");
+const generateToken  = require("../config/generateToken");
+const imagekitConfig = require("../config/imagekit");
 
 const register = async (req, res) => {
   try {
-    // const {path: imageUrl, filename: cloudinaryId} = req.file;
-    const imageUrl = req.file ? req.file.path : null;
-    const cloudinaryId = req.file ? req.file.filename : null;
+   
     const { email, password, username, phone } = req.body;
 
     const userExists = await Auth.findOne({ email });
@@ -18,13 +17,26 @@ const register = async (req, res) => {
       });
     }
 
+    if (!req.file) {
+      return res.status(400).json({
+        message: "Image is required",
+        success: false,
+      });
+    }
+
+    const uploadResponse = await imagekitConfig.upload({
+      file: req.file.buffer,
+      fileName: req.file.originalname,
+      folder: '/e-commerce-app'
+    })
+
     const newUser = await Auth.create({
       email,
       password,
       username,
       phone,
-      imageUrl,
-      cloudinaryId,
+      imageUrl: uploadResponse.url,
+      imagekitId: uploadResponse.fileId,
     });
 
     if (newUser) {

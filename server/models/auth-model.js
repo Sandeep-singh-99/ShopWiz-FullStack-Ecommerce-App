@@ -6,7 +6,7 @@ const authSchema = new Schema({
         type: String,
     },
 
-    cloudinaryId: {
+    imagekitId: {
         type: String,
     },
 
