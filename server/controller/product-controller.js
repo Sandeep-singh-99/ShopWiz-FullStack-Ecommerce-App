@@ -1,3 +1,4 @@
+const imagekitConfig = require("../config/imagekit");
 const Product = require("../models/product-model");
 const NodeCache = require("node-cache");
 
@@ -5,11 +6,6 @@ const nodeCache = new NodeCache();
 
 const addProduct = async (req, res) => {
   try {
-    // Ensure the uploaded images are correctly processed into an array
-    const productImages = req.files ? req.files.map((file) => file.path) : [];
-    const cloudinaryIds = req.files
-      ? req.files.map((file) => file.filename)
-      : [];
 
     const {
       productName,
@@ -20,6 +16,31 @@ const addProduct = async (req, res) => {
       productCategory,
     } = req.body;
 
+    const images = []
+    const imageKitProductIds = []
+
+    if (req.files && req.files['images']) {
+      const imageFiles = req.files['images'];
+      
+      for (const file of imageFiles) {
+          if (!['image/jpeg', 'image/png'].includes(file.mimetype)) {
+              return res.status(400).json({ error: "Only JPEG and PNG allowed for images" });
+          }
+          
+          const uploadResponse = await imagekitConfig.upload({
+              file: file.buffer,
+              fileName: file.originalname,
+              folder: '/e-commerce-app/products'
+          });
+          
+          images.push(uploadResponse.url);
+          imageKitProductIds.push(uploadResponse.fileId);
+      }
+  }
+
+  console.log("Images:", images);
+  console.log("ImageKit Product IDs:", imageKitProductIds);
+  
     const newProduct = await Product.create({
       productName,
       productBrand,
@@ -27,8 +48,8 @@ const addProduct = async (req, res) => {
       salesPrice,
       productDescription,
       productCategory,
-      productImage: productImages, // Store array of image paths
-      cloudinaryId: cloudinaryIds, // Store array of cloudinary ids
+      productImage: images, 
+      imageKitProductId: imageKitProductIds,
     });
 
     nodeCache.del("getProducts");
@@ -72,18 +93,41 @@ const getProducts = async (req, res) => {
 
 const deleteProduct = async (req, res) => {
   try {
-    const { id } = req.params;
+    const { id: productId } = req.params;
 
-    const delProduct = await Product.findByIdAndDelete(id);
+    
+    const product = await Product.findByIdAndDelete(productId);
 
+    if (!product) {
+      return res.status(404).json({
+        message: "Product not found",
+        success: false,
+      });
+    }
+
+ 
+    if (product.imageKitProductId && product.imageKitProductId.length > 0) {
+      try {
+        await Promise.all(
+          product.imageKitProductId.map((fileId) =>
+            imagekitConfig.deleteFile(fileId)
+          )
+        );
+      } catch (error) {
+        console.error("Error deleting images from ImageKit:", error);
+      }
+    }
+
+    // Clear cache
     nodeCache.del("getProducts");
 
     res.status(200).json({
       message: "Product deleted successfully",
       success: true,
-      data: delProduct,
+      data: product, 
     });
   } catch (error) {
+    console.error("Error in deleteProduct:", error);
     res.status(500).json({
       message: error.message,
       success: false,
@@ -93,48 +137,73 @@ const deleteProduct = async (req, res) => {
 
 const updateProduct = async (req, res) => {
   try {
-    const { id } = req.params;
+    const { id: productId } = req.params;
 
-    // Handle file uploads for updating images
-    const productImages = req.files ? req.files.map((file) => file.path) : [];
-    const cloudinaryIds = req.files
-      ? req.files.map((file) => file.filename)
-      : [];
-
-    const {
-      productName,
-      productBrand,
-      productPrice,
-      productDescription,
-      productCategory,
-    } = req.body;
-
-    const updateFields = {
-      productName,
-      productBrand,
-      productPrice,
-      productDescription,
-      productCategory,
-    };
-
-    // Only add images if they are uploaded
-    if (productImages.length > 0) {
-      updateFields.productImage = productImages;
-      updateFields.cloudinaryId = cloudinaryIds;
-    }
-
-    const updatedProduct = await Product.findByIdAndUpdate(id, updateFields, {
-      new: true,
-    });
-
-    if (!updatedProduct) {
-      //console.log("Product not found");
+    // Fetch the existing product
+    const product = await Product.findById(productId);
+    if (!product) {
       return res.status(404).json({
         message: "Product not found",
         success: false,
       });
     }
 
+    const { productName, productPrice, salesPrice, productDescription, productBrand, productCategory } = req.body;
+
+    // Prepare update fields with existing values as defaults
+    const updateFields = {
+      productName: productName || product.productName,
+      productPrice: productPrice || product.productPrice,
+      salesPrice: salesPrice || product.salesPrice,
+      productDescription: productDescription || product.productDescription,
+      productBrand: productBrand || product.productBrand,
+      productCategory: productCategory || product.productCategory,
+      productImage: product.productImage || [], 
+      imageKitProductId: product.imageKitProductId || [], 
+    };
+
+    // Handle image update if a new file is uploaded
+    if (req.file) {
+      if (!['image/jpeg', 'image/png'].includes(req.file.mimetype)) {
+        return res.status(400).json({
+          message: "Only JPEG and PNG images are allowed",
+          success: false,
+        });
+      }
+
+      // Delete old images from ImageKit if they exist
+      if (product.imageKitProductId && product.imageKitProductId.length > 0) {
+        try {
+          await Promise.all(
+            product.imageKitProductId.map((fileId) =>
+              imagekitConfig.deleteFile(fileId)
+            )
+          );
+        } catch (error) {
+          console.error("Error deleting old images from ImageKit:", error);
+        }
+      }
+
+      // Upload new image
+      const uploadResponse = await imagekitConfig.upload({
+        file: req.file.buffer,
+        fileName: req.file.originalname,
+        folder: '/e-commerce-app/products',
+      });
+
+      // Replace the image arrays with the new single image
+      updateFields.productImage = [uploadResponse.url];
+      updateFields.imageKitProductId = [uploadResponse.fileId];
+    }
+
+    // Update the product
+    const updatedProduct = await Product.findByIdAndUpdate(
+      productId,
+      updateFields,
+      { new: true }
+    );
+
+    // Clear cache
     nodeCache.del("getProducts");
 
     res.status(200).json({
@@ -143,6 +212,7 @@ const updateProduct = async (req, res) => {
       data: updatedProduct,
     });
   } catch (error) {
+    console.error("Error in updateProduct:", error);
     res.status(500).json({
       message: error.message,
       success: false,
@@ -151,48 +221,6 @@ const updateProduct = async (req, res) => {
 };
 
 
-// const updateProduct = async (req, res) => {
-//   try {
-//     const { id } = req.params;
-//     const { productName, productPrice, salesPrice, productDescription, productBrand, productCategory } = req.body;
-//     const productImages = req.files ? req.files.map((file) => file.path) : [];
-//     const cloudinaryIds = req.files ? req.files.map((file) => file.filename) : [];
-
-//     // Find the product by ID and update the fields
-//     const updateData = {
-//       productName,
-//       productPrice,
-//       salesPrice,
-//       productDescription,
-//       productBrand,
-//       productCategory,
-//     };
-//     if (productImages.length > 0) updateData.productImage = productImages;
-//     if (cloudinaryIds.length > 0) updateData.cloudinaryId = cloudinaryIds;
-    
-//     console.log('Updating Product Data:', updateData);
-//     const updatedProduct = await Product.findByIdAndUpdate(id, updateData, { new: true });
-//     console.log('Updated Product:', updatedProduct);
-
-//     if (!updatedProduct) {
-//       return res.status(404).json({
-//         message: "Product not found",
-//         success: false,
-//       });
-//     }
-
-//     res.status(200).json({
-//       message: "Product updated successfully",
-//       success: true,
-//       data: updatedProduct,
-//     });
-//   } catch (error) {
-//     res.status(500).json({
-//       message: error.message,
-//       success: false,
-//     });
-//   }
-// };
 
 
 module.exports = {

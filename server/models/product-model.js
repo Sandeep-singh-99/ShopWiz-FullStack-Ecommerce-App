@@ -33,10 +33,12 @@ const productSchema = new Schema({
 
     productImage: {
         type: [String],
+        default: [],
     },
 
-    cloudinaryId: {
+    imageKitProductId: {
         type: [String],
+        default: [],
     }
 })
 
