@@ -40,7 +40,7 @@ const productSchema = new Schema({
         type: [String],
         default: [],
     }
-})
+},{timestamps: true})
 
 productSchema.pre('save', function (next) {
     this.salesPrice = parseFloat(this.salesPrice).toFixed(2)

@@ -71,7 +71,7 @@ const getProducts = async (req, res) => {
     if(nodeCache.has("getProducts")) {
       getProducts = JSON.parse(nodeCache.get("getProducts"));
     } else {
-      getProducts = await Product.find();
+      getProducts = await Product.find().sort({ createdAt: -1 });
       nodeCache.set("getProducts", JSON.stringify(getProducts));
     }
 
