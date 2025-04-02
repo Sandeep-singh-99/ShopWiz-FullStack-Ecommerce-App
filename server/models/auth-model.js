@@ -29,7 +29,7 @@ const authSchema = new Schema({
         type: String,
         required: true
     },
-})
+},{timestamps: true})
 
 authSchema.pre("save", async function(next) {
     if (this.isModified("password")) {
