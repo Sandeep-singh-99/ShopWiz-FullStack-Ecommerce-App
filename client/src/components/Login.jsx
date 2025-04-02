@@ -34,8 +34,7 @@ export default function Login() {
       );
 
       if (response.status === 200 && response.data.success) {
-        const data = response.data;
-        dispatch(login(data));
+        dispatch(login(response.data));
         navigate("/");
         message.success("Login successful");
       } else {

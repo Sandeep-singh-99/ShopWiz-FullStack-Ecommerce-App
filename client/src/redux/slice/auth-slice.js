@@ -7,8 +7,8 @@ const API_BASE_URL = 'http://localhost:5000';
 
 export const logout = createAsyncThunk("auth/logout", async (_, thunkApi) => {
   try {
-    await axios.get(`${API_BASE_URL}/api/auth/logout`);
-    thunkApi.dispatch(logoutAuth());
+    const response = await axios.get(`${API_BASE_URL}/api/auth/logout`, { withCredentials: true });
+    return response.data;
   } catch (error) {
     return thunkApi.rejectWithValue(error.response?.data || "Logout failed");
   }
@@ -18,18 +18,9 @@ export const logout = createAsyncThunk("auth/logout", async (_, thunkApi) => {
 // Check Auth with Optimized Logic
 export const checkAuth = createAsyncThunk("auth/checkAuth", async (_, thunkApi) => {
   try {
-    const token = localStorage.getItem("token");
-
-    if (!token) {
-      return thunkApi.rejectWithValue("No token found");
-    }
-
     const response = await axios.get(`${API_BASE_URL}/api/auth/check-auth`, { withCredentials: true });
     return response.data;
   } catch (error) {
-    if (error.response?.status === 403 || error.response?.status === 401) {
-      thunkApi.dispatch(logoutAuth());
-    }
     return thunkApi.rejectWithValue(error.response?.data || "Authentication failed");
   }
 });
@@ -58,7 +49,7 @@ export const adminLogin = createAsyncThunk(
 
 const initialState = {
   isLoading: false,
-  isAuthenticated: false, //!!localStorage.getItem("token"), // Use a boolean for clarity
+  isAuthenticated: false, 
   error: null,
   user: null,
 };

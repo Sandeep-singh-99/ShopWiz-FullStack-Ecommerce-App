@@ -3,21 +3,9 @@ import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 export default function Header() {
-  const { isAuthenticated,  isLoading } = useSelector((state) => state.auth);
+  const { isAuthenticated, user } = useSelector((state) => state.auth);
+  
   const { countData } = useSelector((state) => state.cart);
-
-  let data = null;
-  try {
-    const loginData = localStorage.getItem("loginData");
-
-    // ✅ Use localStorage data **only if authentication is fulfilled**
-    if (!isLoading && isAuthenticated && loginData) {
-      data = JSON.parse(loginData);
-    }
-  } catch (error) {
-    console.error("Error parsing loginData:", error);
-    localStorage.removeItem("loginData"); // Prevent future errors
-  }
 
   return (
     <div className=" bg-slate-900">
@@ -55,32 +43,24 @@ export default function Header() {
 
           <div>
             {isAuthenticated ? (
-              <Link to={"profile"}>
-                {data ? (
-                  data.imageUrl ? (
-                    <img
-                      src={data.imageUrl}
-                      alt={data.username || "User"}
-                      className="h-12 w-12 rounded-full bg-blend-multiply object-contain"
-                    />
-                  ) : (
-                    <div className="h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center">
-                      <span className="text-gray-600">
-                        {data?.username?.charAt(0) || "?"}
-                      </span>
-                    </div>
-                  )
-                ) : (
-                  <div className="h-10 w-10 rounded-full bg-gray-200 animate-pulse"></div>
-                )}
-              </Link>
+              <div>
+                <Link to={"profile"} className="flex items-center gap-2">
+                <img
+                src={user.data.imageUrl}
+                alt={user.data.username || "User"}
+                className="h-12 w-12 rounded-full bg-blend-multiply object-contain"
+                />
+                </Link>
+              </div>
             ) : (
-              <Link
-                to={"login"}
-                className=" text-white font-semibold px-4 py-2 rounded-md bg-[#db4444] hover:bg-[#db3333]"
-              >
-                Login
-              </Link>
+              <div>
+                <Link
+                  to={"login"}
+                  className=" text-white font-semibold px-4 py-2 rounded-md bg-[#db4444] hover:bg-[#db3333]"
+                >
+                  Login
+                </Link>
+              </div>
             )}
           </div>
         </div>

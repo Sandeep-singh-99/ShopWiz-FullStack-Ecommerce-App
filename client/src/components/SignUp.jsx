@@ -2,11 +2,14 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { message } from "antd";
 import axios from "axios";
+import { useDispatch } from "react-redux";
+import { login } from "../redux/slice/auth-slice";
 
 const API_BASE_URL =  "http://localhost:5000";
 
 export default function Register() {
   const navigate = useNavigate();
+  const dispatch = useDispatch()
   const [uploadedImage, setUploadedImage] = useState(null);
   const [formData, setFormData] = useState({
     imageUrl: null,
@@ -36,7 +39,7 @@ export default function Register() {
     e.preventDefault();
 
     const data = new FormData();
-    data.append("images", uploadedImage); 
+    data.append("file", uploadedImage); 
     data.append("username", formData.username);
     data.append("email", formData.email);
     data.append("phone", formData.phone);
@@ -50,12 +53,14 @@ export default function Register() {
           headers: {
             "Content-Type": "multipart/form-data",
           },
+          withCredentials: true,
         }
       );
-
-      if (response.status === 200 && response.data.success) {
-        navigate("/login");
+      console.log("Response:", response.data);
+      if (response.status === 201 && response.data.success) {
+        dispatch(login(response.data));
         message.success("Registration successful");
+        navigate("/");
       } else {
         message.error(response.data.message || "Registration failed");
       }
@@ -79,6 +84,7 @@ export default function Register() {
                   id="fileInput"
                   name="imageUrl"
                   className="hidden"
+                  accept="image/*"
                   onChange={handleFileChange}
                 />
                 <label

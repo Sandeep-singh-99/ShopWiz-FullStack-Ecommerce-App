@@ -1,24 +1,24 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import { logout } from "../redux/slice/auth-slice";
+import { message } from "antd";
 
 export default function Profile() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { countData } = useSelector((state) => state.cart);
 
-  // Retrieve user data from localStorage
-  let userData = null;
-  try {
-    const storedData = localStorage.getItem("loginData");
-    userData = storedData ? JSON.parse(storedData) : null;
-  } catch (error) {
-    console.error("Error parsing loginData:", error);
-    localStorage.removeItem("loginData");
-  }
+  const { user } = useSelector((state) => state.auth);
 
   const handleLogout = () => {
-    navigate("/");
+    try {
+      dispatch(logout());
+      navigate("/");
+      message.success("Logout successful");
+    } catch (error) {
+      message.error("Logout failed. Please try again.");
+    }
   };
 
   return (
@@ -33,28 +33,28 @@ export default function Profile() {
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Profile Card */}
           <div className="bg-white rounded-xl shadow-lg p-6 w-full lg:w-1/3 flex flex-col items-center transform hover:scale-105 transition-transform duration-300">
-            {userData?.imageUrl ? (
+            {user.data.imageUrl ? (
               <img
-                src={userData.imageUrl}
-                alt={userData.username || "User"}
+                src={user.data.imageUrl}
+                alt={user.data.username || "User"}
                 className="h-28 w-28 rounded-full border-4 border-indigo-100 object-cover shadow-sm"
               />
             ) : (
               <div className="h-28 w-28 rounded-full bg-gradient-to-br from-indigo-200 to-indigo-300 flex items-center justify-center text-4xl font-bold text-white shadow-sm">
-                {userData?.username?.charAt(0)?.toUpperCase() || "?"}
+                {user.data.username?.charAt(0)?.toUpperCase() || "?"}
               </div>
             )}
             <h2 className="mt-4 text-2xl font-semibold text-gray-900">
-              {userData?.username || "Guest User"}
+              {user.data.username || "Guest User"}
             </h2>
             <p className="mt-1 text-sm text-gray-500">
-              {userData?.email || "No email provided"}
+              {user.data.email || "No email provided"}
             </p>
             <p className="mt-1 text-sm text-gray-400">
-              {userData?.phone || "No phone number"}
+              {user.data.phone || "No phone number"}
             </p>
             <button
-              onClick={handleLogout}
+              onClick={() => handleLogout()}
               className="mt-6 w-full bg-gradient-to-r from-red-500 to-red-600 text-white font-semibold rounded-lg py-2.5 hover:from-red-600 hover:to-red-700 transition-all duration-200 shadow-md"
             >
               Logout
