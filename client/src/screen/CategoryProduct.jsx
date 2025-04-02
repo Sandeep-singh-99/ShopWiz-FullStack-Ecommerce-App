@@ -14,7 +14,7 @@ export default function CategoryProduct() {
 
   const [sortOption, setSortOption] = useState("");
   const [selectedCategories, setSelectedCategories] = useState([]);
-  const [showFilters, setShowFilters] = useState(false); 
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
 
   useEffect(() => {
     if (categoryName) {
@@ -26,6 +26,7 @@ export default function CategoryProduct() {
 
   const handleSort = (option) => {
     setSortOption(option);
+    setIsFilterOpen(false); // Close filter on mobile after selection
   };
 
   const handleCategorySelection = (category) => {
@@ -33,7 +34,6 @@ export default function CategoryProduct() {
       const updatedCategories = prev.includes(category)
         ? prev.filter((item) => item !== category)
         : [...prev, category];
-
       navigate(`/category/${updatedCategories.join(",") || ""}`);
       return updatedCategories;
     });
@@ -47,16 +47,13 @@ export default function CategoryProduct() {
       )
     : products;
 
-  const sortedProducts = filteredProducts.sort((a, b) => {
-    if (sortOption === "lowToHigh") {
-      return a.salesPrice - b.salesPrice;
-    } else if (sortOption === "highToLow") {
-      return b.salesPrice - a.salesPrice;
-    }
+  const sortedProducts = [...filteredProducts].sort((a, b) => {
+    if (sortOption === "lowToHigh") return a.salesPrice - b.salesPrice;
+    if (sortOption === "highToLow") return b.salesPrice - a.salesPrice;
     return 0;
   });
 
-  const category = [
+  const categoryList = [
     "Mouse",
     "Airpodes",
     "Camera",
@@ -74,117 +71,156 @@ export default function CategoryProduct() {
   const addToCart = useAddToCart();
 
   return (
-    <div className="container sm:px-20 mx-auto py-8">
-      {/* Mobile filter toggle */}
-      <button
-        className="lg:hidden block bg-gray-200 text-gray-700 px-4 py-2 rounded-md mb-4"
-        onClick={() => setShowFilters(!showFilters)}
-      >
-        {showFilters ? "Hide Filters" : "Show Filters"}
-      </button>
-
-      <div className="grid grid-cols-1 lg:grid-cols-[250px,1fr] gap-4">
-        {/* Sidebar (Filters) */}
-        <div
-          className={`${
-            showFilters ? "block" : "hidden"
-          } lg:block bg-white p-4 overflow-x-auto w-[250px] rounded-md shadow-md h-[90vh] overflow-y-auto sticky`}
-        >
-          <h3 className="text-lg font-semibold text-gray-700 border-b pb-2">
-            Sort by
-          </h3>
-          <form className="text-sm flex flex-col gap-2 py-2">
-            <div className="flex items-center gap-2">
-              <input
-                type="radio"
-                name="sortBy"
-                checked={sortOption === "lowToHigh"}
-                onChange={() => handleSort("lowToHigh")}
-              />
-              <label>Price - Low to High</label>
-            </div>
-            <div className="flex items-center gap-2">
-              <input
-                type="radio"
-                name="sortBy"
-                checked={sortOption === "highToLow"}
-                onChange={() => handleSort("highToLow")}
-              />
-              <label>Price - High to Low</label>
-            </div>
-          </form>
-
-          <h3 className="text-lg font-semibold text-gray-700 border-b pb-2 mt-4">
-            Category
-          </h3>
-          <form className="text-sm flex flex-col gap-2 py-2">
-            {category.map((item, index) => (
-              <div key={index} className="flex items-center gap-2">
-                <input
-                  type="checkbox"
-                  name="category"
-                  checked={selectedCategories.includes(item)}
-                  onChange={() => handleCategorySelection(item)}
-                />
-                <label>{item}</label>
-              </div>
-            ))}
-          </form>
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-200 py-6 px-3 sm:px-6 lg:px-10">
+      <div className="max-w-6xl mx-auto">
+        {/* Header */}
+        <div className="flex flex-col sm:flex-row justify-between items-center mb-6">
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-gray-900 tracking-tight">
+            Explore Products
+          </h1>
+          <button
+            className="sm:hidden mt-3 bg-teal-500 text-white px-4 py-1.5 rounded-full shadow-lg hover:bg-teal-600 transition text-sm"
+            onClick={() => setIsFilterOpen(!isFilterOpen)}
+          >
+            {isFilterOpen ? "Close" : "Filter & Sort"}
+          </button>
         </div>
 
-        {/* Product Listing */}
-        <div>
-          <p className="text-lg font-semibold text-white mb-4">
-            Search Results: {sortedProducts.length}
-          </p>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {loading ? (
-              <p>Loading...</p>
-            ) : error ? (
-              <p>Error: {error}</p>
-            ) : sortedProducts.length > 0 ? (
-              sortedProducts.map((product) => (
-                <Link
-                  to={`/product/${product._id}`}
-                  key={product._id}
-                  className="shadow-lg rounded-lg overflow-hidden bg-white"
+        <div className="flex flex-col lg:flex-row gap-6">
+          {/* Filters (Sidebar on Desktop, Modal on Mobile) */}
+          <div
+            className={`${
+              isFilterOpen
+                ? "fixed inset-0 z-50 bg-white p-4 overflow-y-auto"
+                : "hidden"
+            } lg:static lg:block lg:w-72 lg:bg-transparent lg:p-0`}
+          >
+            <div className="lg:bg-white lg:rounded-2xl lg:shadow-lg lg:p-6 h-full lg:h-fit">
+              {/* Mobile Filter Header */}
+              <div className="flex justify-between items-center mb-4 lg:hidden">
+                <h2 className="text-lg font-bold text-gray-800">Filters</h2>
+                <button
+                  className="text-gray-600 hover:text-gray-800 text-xl"
+                  onClick={() => setIsFilterOpen(false)}
                 >
-                  <div className="bg-gray-200 h-48 flex justify-center items-center">
-                    <img
-                      src={product?.productImage[0]}
-                      className="object-contain mix-blend-multiply w-full h-full"
-                      alt={product.productName}
-                      loading="lazy"
-                    />
-                  </div>
-                  <div className="p-4">
-                    <h2 className="font-semibold line-clamp-2 text-base md:text-lg text-black">
-                      {product.productName}
-                    </h2>
-                    <p className="text-gray-500">{product.productCategory}</p>
-                    <div className="flex gap-2">
-                      <p className="text-red-600 font-medium">
-                        ${product.salesPrice}
-                      </p>
-                      <p className="text-gray-500 line-through">
-                        ${product.productPrice}
-                      </p>
-                    </div>
-                    <button
-                      onClick={(e) => {
-                        e.preventDefault();
-                        addToCart(product._id);
-                      }}
-                      className="mt-2 text-sm bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-md"
+                  ✕
+                </button>
+              </div>
+
+              {/* Sort Options */}
+              <div className="mb-5">
+                <h3 className="text-base font-semibold text-gray-800 mb-2">
+                  Sort By
+                </h3>
+                <select
+                  value={sortOption}
+                  onChange={(e) => handleSort(e.target.value)}
+                  className="w-full p-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                >
+                  <option value="">Default</option>
+                  <option value="lowToHigh">Price: Low to High</option>
+                  <option value="highToLow">Price: High to Low</option>
+                </select>
+              </div>
+
+              {/* Category Filters */}
+              <div>
+                <h3 className="text-base font-semibold text-gray-800 mb-2">
+                  Categories
+                </h3>
+                <div className="space-y-2 max-h-[50vh] overflow-y-auto">
+                  {categoryList.map((item) => (
+                    <label
+                      key={item}
+                      className="flex items-center gap-2 cursor-pointer"
                     >
-                      Add to Cart
-                    </button>
+                      <input
+                        type="checkbox"
+                        checked={selectedCategories.includes(item)}
+                        onChange={() => handleCategorySelection(item)}
+                        className="w-4 h-4 text-teal-500 border-gray-300 rounded focus:ring-teal-500"
+                      />
+                      <span className="text-sm text-gray-700 hover:text-teal-600 transition">
+                        {item}
+                      </span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Product Grid */}
+          <div className="flex-1">
+            <div className="bg-white rounded-2xl shadow-lg p-4 mb-6">
+              <p className="text-sm text-gray-600">
+                Showing{" "}
+                <span className="font-bold text-teal-600">
+                  {sortedProducts.length}
+                </span>{" "}
+                products
+              </p>
+            </div>
+
+            {loading ? (
+              <div className="text-center text-gray-500 animate-pulse text-sm">
+                Loading products...
+              </div>
+            ) : error ? (
+              <div className="text-center text-red-500 bg-red-50 p-3 rounded-lg text-sm">
+                Oops! {error}
+              </div>
+            ) : sortedProducts.length > 0 ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                {sortedProducts.map((product) => (
+                  <div
+                    key={product._id}
+                    className="bg-white rounded-2xl shadow-md overflow-hidden transform hover:scale-105 transition duration-300"
+                  >
+                    <Link to={`/product/${product._id}`}>
+                      <div className="relative h-48 sm:h-64">
+                        <img
+                          src={product?.productImage[0]}
+                          alt={product.productName}
+                          className="w-full h-full object-contain rounded-t-2xl"
+                          loading="lazy"
+                        />
+                        <span className="absolute top-1 right-1 bg-teal-500 text-white text-xs font-semibold px-2 py-0.5 rounded-full">
+                          {product.productCategory}
+                        </span>
+                      </div>
+                    </Link>
+                    <div className="p-3 sm:p-5">
+                      <h2 className="text-base sm:text-lg font-bold text-gray-900 line-clamp-1">
+                        {product.productName}
+                      </h2>
+                      <div className="flex items-center justify-between mt-2">
+                        <div className="flex items-center gap-1 sm:gap-2">
+                          <span className="text-lg sm:text-xl font-semibold text-teal-600">
+                            ${product.salesPrice}
+                          </span>
+                          <span className="text-xs sm:text-sm text-gray-400 line-through">
+                            ${product.productPrice}
+                          </span>
+                        </div>
+                        <button
+                          onClick={(e) => {
+                            e.preventDefault();
+                            addToCart(product._id);
+                          }}
+                          className="bg-teal-500 text-white px-3 py-1 sm:px-4 sm:py-2 rounded-full hover:bg-teal-600 transition text-xs sm:text-sm"
+                        >
+                          Add
+                        </button>
+                      </div>
+                    </div>
                   </div>
-                </Link>
-              ))
+                ))}
+              </div>
             ) : (
-              <p>No products found for the selected categories.</p>
+              <div className="text-center text-gray-500 bg-white p-4 rounded-2xl shadow-lg text-sm">
+                No products found. Try adjusting your filters!
+              </div>
             )}
           </div>
         </div>

@@ -8,7 +8,7 @@ const ProductCard = ({ product }) => {
   return (
     <Link
       to={`product/${product?._id}`}
-      className="rounded-lg border border-gray-200 bg-white shadow-lg w-full sm:w-[320px] md:w-[300px] lg:w-[340px] dark:border-gray-700 dark:bg-gray-800"
+      className="rounded-lg border border-gray-200 bg-white shadow-2xl w-full sm:w-[320px] md:w-[300px] lg:w-[340px] dark:border-gray-700 dark:bg-gray-800"
     >
       <div className="h-40 w-full overflow-hidden rounded-t-md bg-white">
         <img

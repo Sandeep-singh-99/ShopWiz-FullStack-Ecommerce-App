@@ -10,7 +10,7 @@ function App() {
   return (
     <>
       {!hideHeader.includes(location.pathname) && <Header />}
-     <div className="bg-slate-900">
+     <div className="bg-gradient-to-b from-gray-50 to-gray-200 mt-1">
       <Outlet/>
       </div>
       {!hideFooter.includes(location.pathname) && <Footer />}

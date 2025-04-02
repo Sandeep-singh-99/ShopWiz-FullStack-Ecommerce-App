@@ -43,11 +43,11 @@ export default function HorizontalCategory() {
         {categories.map((item) => (
           <div
             key={item.id}
-            className="flex-shrink-0 w-28 sm:w-auto cursor-pointer flex flex-col items-center group transition-all duration-300 ease-in-out hover:bg-gray-50 rounded-lg p-2"
+            className="flex-shrink-0 w-28 sm:w-auto cursor-pointer flex flex-col items-center group transition-all duration-300 ease-in-out rounded-lg p-2"
             onClick={() => navigate(`/category/${item.name}`)}
           >
             {/* Category Image */}
-            <div className="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 lg:w-32 lg:h-32 bg-white shadow-md rounded-md overflow-hidden flex items-center justify-center transition-all duration-300 ease-in-out group-hover:shadow-lg group-hover:scale-105 border border-gray-100">
+            <div className="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 lg:w-32 lg:h-32 bg-white  shadow-md rounded-md overflow-hidden flex items-center justify-center transition-all duration-300 ease-in-out group-hover:shadow-lg group-hover:scale-105 border border-gray-500">
               <img
                 loading="lazy"
                 className="w-full h-full object-contain p-2 transition-transform duration-300 ease-in-out group-hover:scale-110"
@@ -59,7 +59,7 @@ export default function HorizontalCategory() {
             </div>
 
             {/* Category Name */}
-            <span className="mt-2 text-xs sm:text-sm md:text-base font-medium text-white text-center transition-colors duration-200 group-hover:text-blue-600">
+            <span className="mt-2 text-xs sm:text-sm md:text-base font-medium text-black text-center transition-colors duration-200 group-hover:text-blue-600">
               {item.name}
             </span>
           </div>
