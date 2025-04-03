@@ -49,6 +49,6 @@ commentSchema.pre('save', function (next) {
     next()
 })
 
-const Comment = new model("comment", commentSchema)
+const Comment = new model("Comment", commentSchema)
 
 module.exports = Comment

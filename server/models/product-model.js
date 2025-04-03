@@ -48,6 +48,6 @@ productSchema.pre('save', function (next) {
     next()
 })
 
-const Product = new model("product", productSchema)
+const Product = new model("Product", productSchema)
 
 module.exports = Product

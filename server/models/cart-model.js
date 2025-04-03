@@ -14,6 +14,6 @@ const cartSchema = new Schema({
     timestamps: true
 })
 
-const Cart = new model("cart", cartSchema)
+const Cart = new model("Cart", cartSchema)
 
 module.exports = Cart
