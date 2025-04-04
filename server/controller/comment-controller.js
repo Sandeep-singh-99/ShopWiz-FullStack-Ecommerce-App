@@ -61,7 +61,7 @@ const viewComment = async (req, res) => {
       comments = await Comment.find({ productId }).populate(
         "userId",
         "username imageUrl"
-      );
+      ).sort({ createdAt: -1 }); 
       
     
 

@@ -3,12 +3,12 @@ const { Schema, model } = require("mongoose");
 const commentSchema = new Schema({
     userId: {
         type: String,
-        ref: 'auth',
+        ref: 'Auth',
     },
 
     productId: {
         type: String,
-        ref: 'product',
+        ref: 'Product',
     },
 
     comment: {

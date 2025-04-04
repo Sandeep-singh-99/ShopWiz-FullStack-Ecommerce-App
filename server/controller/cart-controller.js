@@ -64,7 +64,7 @@ const addToCartViewProduct = async (req, res) => {
     } else {
        allProducts = await Cart.find({ userId: currentUser }).populate(
         "productId"
-      );
+      ).sort({ createdAt: -1 });
       nodeCache.set("allProducts", JSON.stringify(allProducts));
     }
 

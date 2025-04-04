@@ -2,12 +2,12 @@ const { Schema, model } = require("mongoose");
 
 const cartSchema = new Schema({
     userId: {
-        ref: 'auth',
+        ref: 'Auth',
         type: String,
     },
     quantity: Number,
     productId: {
-        ref: 'product',
+        ref: 'Product',
         type: String,
     }
 }, {
