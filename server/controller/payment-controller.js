@@ -6,7 +6,7 @@ const Payment = require("../models/payment-model");
 const PHONEPE_MERCHANT_ID = "PGTESTPAYUAT86";
 const PHONEPE_SALT_KEY = "96434309-7796-489d-8924-ab56988a6076";
 const PHONEPE_SALT_INDEX = "1";
-const PHONEPE_BASE_URL = "https://api-preprod.phonepe.com/apis/pg-sandbox"; // Test URL
+const PHONEPE_BASE_URL = "https://api-preprod.phonepe.com/apis/pg-sandbox"; 
 const REDIRECT_URL = "http://localhost:5173/status";
 
 exports.initiatePayment = async (req, res) => {

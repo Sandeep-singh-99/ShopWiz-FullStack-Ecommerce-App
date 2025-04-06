@@ -3,12 +3,11 @@ import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 
 const StatusPage = () => {
-  const { merchantTransactionId: paramTransactionId } = useParams(); // From /status/:merchantTransactionId
+  const { merchantTransactionId: paramTransactionId } = useParams(); 
   const location = useLocation();
   const navigate = useNavigate();
   const [status, setStatus] = useState('checking');
 
-  // Extract transactionId from query params if not in path
   const queryParams = new URLSearchParams(location.search);
   const queryTransactionId = queryParams.get('transactionId');
   const transactionId = paramTransactionId || queryTransactionId;
