@@ -13,6 +13,9 @@ import Order from "../screen/admin/Order";
 import CategoryProduct from "../screen/CategoryProduct";
 import ProductDetails from "../screen/ProductDetails";
 import CartPage from "../screen/CartPage";
+import StatusPage from "../screen/StatusPage";
+import PaymentSuccess from "../screen/PaymentSuccess";
+import PaymentFailed from "../screen/PaymentFailed";
 
 const router = createBrowserRouter([
     {
@@ -47,6 +50,22 @@ const router = createBrowserRouter([
             {
                 path: "cart",
                 element: <CartPage/>
+            },
+            {
+                path: '/status/:merchantTransactionId',
+                element: <StatusPage/>
+            },
+            {
+                path: 'status',
+                element: <StatusPage/>
+            },
+            {
+                path: "payment-success",
+                element: <PaymentSuccess/>
+            },
+            {
+                path: "payment-failed",
+                element: <PaymentFailed/>
             }
         ],
     },

@@ -7,8 +7,6 @@ const addToCart = async (req, res) => {
     const { productId } = req?.body;
     const currentUser = req.user.id; 
 
-    console.log("current user: ", currentUser);
-
     if (!currentUser) {
       return res.status(400).json({
         message: "User not authenticated",
@@ -55,7 +53,7 @@ const addToCart = async (req, res) => {
 
 const addToCartViewProduct = async (req, res) => {
   try {
-    const currentUser = req.user?.id; 
+    const currentUser = req.user?.id;
 
     let allProducts;
 
