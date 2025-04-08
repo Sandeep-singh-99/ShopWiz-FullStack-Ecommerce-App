@@ -1,6 +1,7 @@
 const crypto = require("crypto");
 const axios = require("axios");
 const Payment = require("../models/payment-model");
+const Cart = require("../models/cart-model");
 
 // PhonePe credentials
 const PHONEPE_MERCHANT_ID = "PGTESTPAYUAT86";
@@ -9,7 +10,7 @@ const PHONEPE_SALT_INDEX = "1";
 const PHONEPE_BASE_URL = "https://api-preprod.phonepe.com/apis/pg-sandbox"; 
 const REDIRECT_URL = "http://localhost:5173/status";
 
-exports.initiatePayment = async (req, res) => {
+const initiatePayment = async (req, res) => {
     try {
         const userId = req.user.id;
         console.log("User ID:", userId);
@@ -89,74 +90,7 @@ exports.initiatePayment = async (req, res) => {
     }
 };
 
-
-
-
-// exports.checkPaymentStatus = async (req, res) => {
-//     try {
-//         console.log('checkPaymentStatus - Params:', req.params);
-    
-//         const { transactionId } = req.params;
-
-//         if (!transactionId) {
-//             return res.status(400).json({ 
-//                 success: false, 
-//                 message: "Transaction ID is required" 
-//             });
-//         }
-
-//         const stringToSign = `/pg/v1/status/${PHONEPE_MERCHANT_ID}/${transactionId}${PHONEPE_SALT_KEY}`;
-//         const xVerify = `${crypto.createHash("sha256")
-//             .update(stringToSign)
-//             .digest("hex")}###${PHONEPE_SALT_INDEX}`;
-
-//         const phonepeRes = await axios.get(
-//             `${PHONEPE_BASE_URL}/pg/v1/status/${PHONEPE_MERCHANT_ID}/${transactionId}`,
-//             {
-//                 headers: {
-//                     "Content-Type": "application/json",
-//                     "X-VERIFY": xVerify,
-//                     "X-MERCHANT-ID": PHONEPE_MERCHANT_ID
-//                 },
-//                 timeout: 10000
-//             }
-//         );
-
-//         const payment = await Payment.findOne({ 
-//             merchantTransactionId: transactionId,
-//             userId: req.userId
-//         });
-
-//         if (!payment) {
-//             return res.status(404).json({ 
-//                 success: false, 
-//                 message: "Payment not found or unauthorized" 
-//             });
-//         }
-
-//         const status = phonepeRes.data.code === "PAYMENT_SUCCESS" ? "SUCCESS" : 
-//                       phonepeRes.data.code === "PAYMENT_ERROR" ? "FAILED" : "PENDING";
-
-//         payment.status = status;
-//         payment.paymentResponse = phonepeRes.data;
-//         await payment.save();
-
-//         return res.status(200).json({ 
-//             success: true, 
-//             status, 
-//             payment: payment.toJSON() 
-//         });
-//     } catch (error) {
-//         console.error("Status check error:", error);
-//         return res.status(500).json({ 
-//             success: false, 
-//             message: "Failed to check payment status",
-//             error: error.message 
-//         });
-//     }
-// };
-
-exports.checkPaymentStatus = async (req, res) => {
+const checkPaymentStatus = async (req, res) => {
     try {
         console.log('checkPaymentStatus - Params:', req.params);
         const { transactionId } = req.params;
@@ -218,4 +152,9 @@ exports.checkPaymentStatus = async (req, res) => {
             error: error.message 
         });
     }
+};
+
+module.exports = {
+    initiatePayment,
+    checkPaymentStatus
 };
