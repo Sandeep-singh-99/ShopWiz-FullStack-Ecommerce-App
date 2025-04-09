@@ -2,6 +2,7 @@ const crypto = require("crypto");
 const axios = require("axios");
 const Payment = require("../models/payment-model");
 const Cart = require("../models/cart-model");
+const Order = require("../models/order-model");
 
 // PhonePe credentials
 const PHONEPE_MERCHANT_ID = "PGTESTPAYUAT86";
@@ -90,37 +91,31 @@ const initiatePayment = async (req, res) => {
     }
 };
 
+
 const checkPaymentStatus = async (req, res) => {
     try {
-        console.log('checkPaymentStatus - Params:', req.params);
         const { transactionId } = req.params;
 
         if (!transactionId) {
-            console.log('checkPaymentStatus - No transactionId');
             return res.status(400).json({ success: false, message: "Transaction ID is required" });
         }
 
-        console.log('checkPaymentStatus - Searching payment for:', { transactionId, userId: req.user });
         const payment = await Payment.findOne({ 
             merchantTransactionId: transactionId,
             userId: req.user
         });
-        console.log('checkPaymentStatus - Payment found:', payment);
 
         if (!payment) {
-            console.log('checkPaymentStatus - No payment found');
             return res.status(404).json({ 
                 success: false, 
                 message: "Payment not found or unauthorized" 
             });
         }
 
-        // await Cart.deleteMany({ userId: req.user });
-
         const stringToSign = `/pg/v1/status/${PHONEPE_MERCHANT_ID}/${transactionId}${PHONEPE_SALT_KEY}`;
         const xVerify = `${crypto.createHash("sha256").update(stringToSign).digest("hex")}###${PHONEPE_SALT_INDEX}`;
 
-        console.log('checkPaymentStatus - Fetching PhonePe status');
+        console.log('Checking PhonePe status for transaction:', transactionId);
         const phonepeRes = await axios.get(
             `${PHONEPE_BASE_URL}/pg/v1/status/${PHONEPE_MERCHANT_ID}/${transactionId}`,
             {
@@ -129,33 +124,82 @@ const checkPaymentStatus = async (req, res) => {
                     "X-VERIFY": xVerify,
                     "X-MERCHANT-ID": PHONEPE_MERCHANT_ID
                 },
-                timeout: 10000
             }
         );
 
-        const status = phonepeRes.data.code === "PAYMENT_SUCCESS" ? "SUCCESS" : 
-                      phonepeRes.data.code === "PAYMENT_ERROR" ? "FAILED" : "PENDING";
+        
+        // Log the full PhonePe response to debug
+        console.log('PhonePe Status Response:', JSON.stringify(phonepeRes.data, null, 2));
 
+        // More comprehensive status checking
+        let status;
+        switch (phonepeRes.data.code) {
+            case "PAYMENT_SUCCESS":
+                status = "SUCCESS";
+                break;
+            case "PAYMENT_ERROR":
+            case "PAYMENT_DECLINED":
+            case "PAYMENT_REJECTED":
+                status = "FAILED";
+                break;
+            case "PAYMENT_PENDING":
+            case "AUTHORIZATION_PENDING":
+            case "PAYMENT_INITIATED":
+                status = "PENDING";
+                break;
+            default:
+                console.log('Unhandled PhonePe status code:', phonepeRes.data.code);
+                status = "PENDING";
+        }
+
+        // Update payment status
         payment.status = status;
         payment.paymentResponse = phonepeRes.data;
         await payment.save();
 
-        console.log('checkPaymentStatus - Completed:', { status });
+        // Create order if payment is successful
+        if (status === "SUCCESS") {
+            try {
+                const order = await Order.create({
+                    userId: payment.userId,
+                    paymentId: payment._id,
+                    items: payment.cartItems.map(item => ({
+                        productId: item.productId,
+                        quantity: item.quantity,
+                        price: item.price || 0 // Add fallback price
+                    })),
+                    totalAmount: payment.amount,
+                    merchantTransactionId: payment.merchantTransactionId,
+                    orderId: payment.orderId,
+                    status: "CONFIRMED",
+                });
+                
+                await Cart.deleteMany({ userId: req.user });
+                // console.log('Order created successfully:', order._id);
+            } catch (orderError) {
+                console.error('Order creation failed:', orderError);
+                // You might want to handle this differently based on your needs
+            }
+        }
+
+        
+
         return res.status(200).json({ 
             success: true, 
-            status, 
-            payment: payment.toJSON() 
+            status,
+            payment: payment.toJSON(),
+            phonepeResponse: phonepeRes.data // Include raw response for debugging
         });
     } catch (error) {
-        console.error("Status check error:", error);
+        console.error("Status check error:", error.response?.data || error.message);
         return res.status(500).json({ 
             success: false, 
             message: "Failed to check payment status",
-            error: error.message 
+            error: error.message,
+            errorDetails: error.response?.data
         });
     }
 };
-
 
 
 
