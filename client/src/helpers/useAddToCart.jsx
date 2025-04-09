@@ -1,6 +1,6 @@
 import { useDispatch } from "react-redux";
 import { addCart, countCartProduct } from "../redux/slice/cart-slice";
-import { message } from "antd";
+import toast from "react-hot-toast";
 
 const useAddToCart = () => {
   const dispatch = useDispatch();
@@ -11,9 +11,9 @@ const useAddToCart = () => {
     console.log("Add to Cart Response:", response);
     if (response.type === addCart.fulfilled.type) {
       dispatch(countCartProduct());
-      message.success(response.payload?.message || "Product added to cart!");
+      toast.success(response.payload?.message || "Product added to cart!");
     } else {
-        message.error(response.payload?.message || "Failed to add product to cart.");
+        toast.error(response.payload?.message || "Failed to add product to cart.");
     }
   };
 

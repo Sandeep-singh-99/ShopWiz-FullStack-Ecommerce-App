@@ -115,6 +115,8 @@ const checkPaymentStatus = async (req, res) => {
             });
         }
 
+        // await Cart.deleteMany({ userId: req.user });
+
         const stringToSign = `/pg/v1/status/${PHONEPE_MERCHANT_ID}/${transactionId}${PHONEPE_SALT_KEY}`;
         const xVerify = `${crypto.createHash("sha256").update(stringToSign).digest("hex")}###${PHONEPE_SALT_INDEX}`;
 
@@ -153,6 +155,9 @@ const checkPaymentStatus = async (req, res) => {
         });
     }
 };
+
+
+
 
 module.exports = {
     initiatePayment,
