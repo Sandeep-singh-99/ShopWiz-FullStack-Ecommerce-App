@@ -3,6 +3,9 @@ const axios = require("axios");
 const Payment = require("../models/payment-model");
 const Cart = require("../models/cart-model");
 const Order = require("../models/order-model");
+const NodeCache = require("node-cache");
+const Product = require("../models/product-model");
+const nodeCache = new NodeCache();
 
 // PhonePe credentials
 const PHONEPE_MERCHANT_ID = "PGTESTPAYUAT86";
@@ -160,13 +163,23 @@ const checkPaymentStatus = async (req, res) => {
         // Create order if payment is successful
         if (status === "SUCCESS") {
             try {
+
+                // Fetch product details for all items in cartItems
+                const productIds = payment.cartItems.map(item => item.productId);
+                const products = await Product.find({ _id: { $in: productIds } }).select('salesPrice');
+
+                // Map products to a lookup object for easy access
+                const productPriceMap = new Map(products.map(p => [p._id.toString(), p.salesPrice]));
+
+
                 const order = await Order.create({
                     userId: payment.userId,
                     paymentId: payment._id,
                     items: payment.cartItems.map(item => ({
                         productId: item.productId,
                         quantity: item.quantity,
-                        price: item.price || 0 // Add fallback price
+                        // price: item.price || 0 
+                        price: productPriceMap.get(item.productId.toString()) || 0
                     })),
                     totalAmount: payment.amount,
                     merchantTransactionId: payment.merchantTransactionId,
@@ -175,6 +188,7 @@ const checkPaymentStatus = async (req, res) => {
                 });
                 
                 await Cart.deleteMany({ userId: req.user });
+                nodeCache.del("allProducts");
                 // console.log('Order created successfully:', order._id);
             } catch (orderError) {
                 console.error('Order creation failed:', orderError);
