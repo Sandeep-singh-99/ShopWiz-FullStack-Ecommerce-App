@@ -95,9 +95,9 @@ export default function Profile() {
               </div>
               <div className="mt-4 border-t border-gray-200 pt-4 flex flex-col sm:flex-row justify-between items-center gap-4">
                 <p className="text-gray-600">Track your order history</p>
-                <button className="w-full sm:w-auto bg-purple-600 text-white font-semibold rounded-lg py-2 px-4 hover:bg-purple-700 transition-all duration-200 shadow-sm">
+                <Link to={"/order"} className="w-full sm:w-auto bg-purple-600 text-white font-semibold rounded-lg py-2 px-4 hover:bg-purple-700 transition-all duration-200 shadow-sm">
                   View Orders
-                </button>
+                </Link>
               </div>
             </div>
           </div>

@@ -8,7 +8,11 @@ const getOrders = async (req, res) => {
             return res.status(401).json({ error: 'Unauthorized' });
         }
 
-        const orders = await Order.find({ userId }).sort({ createdAt: -1 });
+        const orders = await Order.find({ userId }).populate("items.productId", " productImage").sort({ createdAt: -1 });
+
+        if (!orders || orders.length === 0) {
+            return res.status(404).json({ error: 'No orders found' });
+        }
 
         res.status(200).json({ data: orders, message: 'Orders fetched successfully' });
     } catch (error) {

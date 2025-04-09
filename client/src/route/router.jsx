@@ -16,6 +16,7 @@ import CartPage from "../screen/CartPage";
 import StatusPage from "../screen/StatusPage";
 import PaymentSuccess from "../screen/PaymentSuccess";
 import PaymentFailed from "../screen/PaymentFailed";
+import OrderPage from "../screen/OrderPage";
 
 const router = createBrowserRouter([
     {
@@ -66,6 +67,10 @@ const router = createBrowserRouter([
             {
                 path: "payment-failed",
                 element: <PaymentFailed/>
+            },
+            {
+                path: "order",
+                element: <OrderPage/>
             }
         ],
     },
