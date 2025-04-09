@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { fetchProductById } from "../redux/slice/product-slice";
-import { message } from "antd";
+import toast from "react-hot-toast";
 import {
   AddComment,
   clearComment,
@@ -26,12 +26,12 @@ export default function ProductDetails() {
     e.preventDefault();
   
     if (!id) {
-      message.error("Product ID is missing.");
+      toast.error("Product ID is missing.");
       return;
     }
   
     if (!addComment.trim()) {
-      message.warning("Please enter a comment before submitting.");
+      toast.warning("Please enter a comment before submitting.");
       return;
     }
   
@@ -40,11 +40,11 @@ export default function ProductDetails() {
     try {
       const res = await dispatch(AddComment({ id, data })).unwrap();
       
-      message.success(res?.message || "Comment added successfully!"); 
+      toast.success(res?.message || "Comment added successfully!"); 
       setAddComment(""); 
       dispatch(GetComments(id)); 
     } catch (err) {
-      message.error(err?.message || "Failed to add comment. Please try again."); 
+      toast.error(err?.message || "Failed to add comment. Please try again."); 
     }
   };
   
@@ -55,7 +55,7 @@ export default function ProductDetails() {
       dispatch(fetchProductById(id))
         .unwrap()
         .catch(() => {
-          message.error("Failed to fetch product.");
+          toast.error("Failed to fetch product.");
         });
       dispatch(GetComments(id))
         .then((res) => console.log("Fetched Comments:", res.payload))

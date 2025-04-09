@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useMemo, lazy, Suspense } from "react";
-import { message } from "antd";
 import axios from "axios";
+import toast from "react-hot-toast";
 
 const API_BASE_URL = "http://localhost:5000";
 
@@ -22,7 +22,7 @@ export default function HorizontalCardProduct({ category, heading }) {
         setCategories(response.data.data);
         setLoading(false);
       } catch (error) {
-        message.error("Failed to load products. Please try again.");
+        toast.error("Failed to load products. Please try again.");
         setLoading(true);
       }
     };

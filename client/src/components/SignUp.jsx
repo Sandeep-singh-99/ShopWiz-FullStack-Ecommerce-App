@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { message } from "antd";
+import toast from "react-hot-toast";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import { login } from "../redux/slice/auth-slice";
@@ -59,13 +59,13 @@ export default function Register() {
       console.log("Response:", response.data);
       if (response.status === 201 && response.data.success) {
         dispatch(login(response.data));
-        message.success("Registration successful");
+        toast.success("Registration successful");
         navigate("/");
       } else {
-        message.error(response.data.message || "Registration failed");
+        toast.error(response.data.message || "Registration failed");
       }
     } catch (error) {
-      message.error("Registration failed");
+      toast.error("Registration failed");
     }
   };
 

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { message } from "antd";
+import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { adminLogin } from "../../redux/slice/auth-slice";
 import { useNavigate } from "react-router-dom";
@@ -28,12 +28,12 @@ export default function AdminLogin() {
     dispatch(adminLogin(data))
       .unwrap()
       .then(() => {
-        message.success("Login successful");
+        toast.success("Login successful");
         navigate("/admin");
       })
       .catch((err) => {
         localStorage.removeItem("adminToken"); // Remove token if login fails
-        message.error("Login failed");
+        toast.error("Login failed");
       });
   };
 

@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { login } from "../redux/slice/auth-slice";
 import { useDispatch } from "react-redux";
 import axios from "axios";
-import { message } from "antd";
+import toast from "react-hot-toast";
 
 const API_BASE_URL = "http://localhost:5000";
 
@@ -20,7 +20,7 @@ export default function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.email || !formData.password) {
-      message.warning("Please fill in all fields.");
+      toast.warning("Please fill in all fields.");
       return;
     }
     try {
@@ -36,12 +36,12 @@ export default function Login() {
       if (response.status === 200 && response.data.success) {
         dispatch(login(response.data));
         navigate("/");
-        message.success("Login successful");
+        toast.success("Login successful");
       } else {
-        message.error("Login failed");
+        toast.error("Login failed");
       }
     } catch (error) {
-      message.error("Error logging in");
+      toast.error("Error logging in");
       console.error("Error: ", error);
     }
   };

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { message } from "antd";
+import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import {
   countCartProduct,
@@ -25,13 +25,13 @@ export default function CartPage() {
     try {
       const resultAction = await dispatch(deleteCartProduct(id));
       if (deleteCartProduct.fulfilled.match(resultAction)) {
-        message.success("Item removed from cart");
+        toast.success("Item removed from cart");
         await dispatch(countCartProduct());
       } else {
         throw new Error(resultAction.requestStatus || "Failed to delete item");
       }
     } catch (error) {
-      message.error(error.message || "Something went wrong");
+      toast.error(error.message || "Something went wrong");
     }
   };
 
@@ -41,13 +41,13 @@ export default function CartPage() {
         updateToCartProduct({ _id: id, quantity })
       );
       if (updateToCartProduct.fulfilled.match(resultAction)) {
-        message.success("Cart updated successfully");
+        toast.success("Cart updated successfully");
         dispatch(getToCart());
       } else {
         throw new Error(resultAction.requestStatus || "Failed to update cart");
       }
     } catch (error) {
-      message.error(error.message || "Something went wrong");
+      toast.error(error.message || "Something went wrong");
     }
   };
 
@@ -56,7 +56,7 @@ export default function CartPage() {
       dispatch(getToCart());
       dispatch(countCartProduct());
     } else {
-      message.error("Please login to continue");
+      toast.error("Please login to continue");
       navigate("/login"); // Redirect to login if not authenticated
     }
   }, [isAuthenticated, dispatch, navigate]);

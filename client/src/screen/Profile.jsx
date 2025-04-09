@@ -2,7 +2,7 @@ import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../redux/slice/auth-slice";
-import { message } from "antd";
+import toast from "react-hot-toast";
 
 export default function Profile() {
   const navigate = useNavigate();
@@ -15,9 +15,9 @@ export default function Profile() {
     try {
       dispatch(logout());
       navigate("/");
-      message.success("Logout successful");
+      toast.success("Logout successful");
     } catch (error) {
-      message.error("Logout failed. Please try again.");
+      toast.error("Logout failed. Please try again.");
     }
   };
 
