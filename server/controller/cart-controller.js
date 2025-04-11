@@ -31,8 +31,6 @@ const addToCart = async (req, res) => {
       userId: currentUser,
     };
 
-    console.log("payload: ", payload);
-
     const newAddToCart = await Cart.create(payload);
 
     nodeCache.del("allProducts");
@@ -126,7 +124,7 @@ const deleteCart = async (req, res) => {
 
 const updateCartProduct = async (req, res) => {
     try {
-      const currentUserId = req.user.id;  // Assuming userId is added via middleware
+      const currentUserId = req.user.id;  
       const cartProductId = req.body._id;
       const quantity = req.body.quantity;
   

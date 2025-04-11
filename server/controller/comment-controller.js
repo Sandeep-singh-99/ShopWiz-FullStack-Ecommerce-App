@@ -1,6 +1,8 @@
 const Comment = require("../models/comment-models");
 const NodeCache = require("node-cache");
 const nodeCache = new NodeCache();
+
+
 const addComment = async (req, res) => {
     try {
       const { productId, comment } = req?.body;
@@ -27,7 +29,6 @@ const addComment = async (req, res) => {
         userId: currentUser,
         comment,
       };
-      console.log("comment Payload: ", payload);
   
       const newComment = await Comment.create(payload);
   
@@ -46,10 +47,8 @@ const addComment = async (req, res) => {
 
 const viewComment = async (req, res) => {
   try {
-    const { productId } = req.params; // Extract from req.params, not req.body
+    const { productId } = req.params; 
     let comments;
-
-    console.log("Received productId:", productId); // Debugging log
 
     if (!productId) {
       return res
