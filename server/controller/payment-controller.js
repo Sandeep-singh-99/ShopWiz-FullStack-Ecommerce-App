@@ -5,7 +5,7 @@ const Cart = require("../models/cart-model");
 const Order = require("../models/order-model");
 const NodeCache = require("node-cache");
 const Product = require("../models/product-model");
-const nodeCache = new NodeCache();
+const nodeCache = new NodeCache({ stdTTL: 10 });
 
 // PhonePe credentials
 const PHONEPE_MERCHANT_ID = "PGTESTPAYUAT86";
@@ -186,13 +186,10 @@ const checkPaymentStatus = async (req, res) => {
                     orderId: payment.orderId,
                     status: "CONFIRMED",
                 });
-                
                 await Cart.deleteMany({ userId: req.user });
                 nodeCache.del("allProducts");
-                // console.log('Order created successfully:', order._id);
             } catch (orderError) {
                 console.error('Order creation failed:', orderError);
-                // You might want to handle this differently based on your needs
             }
         }
 
@@ -202,7 +199,7 @@ const checkPaymentStatus = async (req, res) => {
             success: true, 
             status,
             payment: payment.toJSON(),
-            phonepeResponse: phonepeRes.data // Include raw response for debugging
+            phonepeResponse: phonepeRes.data 
         });
     } catch (error) {
         console.error("Status check error:", error.response?.data || error.message);
