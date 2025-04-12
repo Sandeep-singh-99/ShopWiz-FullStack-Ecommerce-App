@@ -1,13 +1,16 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../redux/slice/auth-slice";
 import toast from "react-hot-toast";
+import { getTotalOrder } from "../redux/slice/order-slice";
 
 export default function Profile() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { countData } = useSelector((state) => state.cart);
+
+  const { totalOrders } = useSelector((state) => state.order);
 
   const { user } = useSelector((state) => state.auth);
 
@@ -20,6 +23,10 @@ export default function Profile() {
       toast.error("Logout failed. Please try again.");
     }
   };
+
+  useEffect(() => {
+    dispatch(getTotalOrder())
+  },[dispatch])
 
   return (
     <div className="min-h-screen bg-gray-100 py-10 px-4 sm:px-6 lg:px-8">
@@ -90,7 +97,7 @@ export default function Profile() {
               <div className="flex items-center justify-between">
                 <h3 className="text-xl font-semibold text-gray-800">Orders</h3>
                 <span className="bg-purple-100 text-purple-700 text-sm font-medium px-2.5 py-0.5 rounded-full">
-                  0 Orders
+                  {totalOrders} Orders
                 </span>
               </div>
               <div className="mt-4 border-t border-gray-200 pt-4 flex flex-col sm:flex-row justify-between items-center gap-4">

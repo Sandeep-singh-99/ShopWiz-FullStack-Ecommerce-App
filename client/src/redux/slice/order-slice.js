@@ -18,12 +18,25 @@ export const getOrder = createAsyncThunk(
   }
 );
 
+export const getTotalOrder = createAsyncThunk("order/getTotalOrder", async (_, thunkApi) => {
+  try {
+    const response = await axios.get(`${API_BASE_URL}/api/order/total-orders`, {
+      withCredentials: true,
+    })
+
+    return response.data
+  } catch (error) {
+    return thunkApi.rejectWithValue(error.response?.data || "Unknown error");
+  }
+})
+
 const orderSlice = createSlice({
   name: "order",
   initialState: {
     orders: [],
     loading: false,
     error: null,
+    totalOrders: 0,
   },
 
   extraReducers: (builder) => {
@@ -37,6 +50,21 @@ const orderSlice = createSlice({
         state.orders = action.payload.data;
       })
       .addCase(getOrder.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload.error;
+      })
+
+      .addCase(getTotalOrder.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+
+      .addCase(getTotalOrder.fulfilled, (state, action) => {
+        state.loading = false;
+        state.totalOrders = action.payload.data;
+      })
+
+      .addCase(getTotalOrder.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload.error;
       });
