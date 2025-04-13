@@ -7,12 +7,14 @@ const NodeCache = require("node-cache");
 const Product = require("../models/product-model");
 const nodeCache = new NodeCache({ stdTTL: 10 });
 
-// PhonePe credentials
-const PHONEPE_MERCHANT_ID = "PGTESTPAYUAT86";
-const PHONEPE_SALT_KEY = "96434309-7796-489d-8924-ab56988a6076";
-const PHONEPE_SALT_INDEX = "1";
-const PHONEPE_BASE_URL = "https://api-preprod.phonepe.com/apis/pg-sandbox"; 
-const REDIRECT_URL = "http://localhost:5173/status";
+
+const PHONEPE_MERCHANT_ID = process.env.MERCHANT_ID
+const PHONEPE_SALT_KEY = process.env.SALT_KEY
+const PHONEPE_SALT_INDEX = process.env.KEY_INDEX
+
+
+const PHONEPE_BASE_URL = process.env.PHONEPE_BASE_URL 
+const REDIRECT_URL = process.env.REDIRECT_URL || "http://localhost:5173/status"; 
 
 const initiatePayment = async (req, res) => {
     try {
