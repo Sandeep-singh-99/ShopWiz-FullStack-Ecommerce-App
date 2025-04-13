@@ -8,8 +8,6 @@ import Profile from "../screen/Profile";
 import AdminLogin from "../screen/admin/AdminLogin";
 import AdminHome from "../screen/admin/AdminHome";
 import Product from "../screen/admin/Product";
-import User from "../screen/admin/User";
-import Order from "../screen/admin/Order";
 import CategoryProduct from "../screen/CategoryProduct";
 import ProductDetails from "../screen/ProductDetails";
 import CartPage from "../screen/CartPage";
@@ -88,14 +86,6 @@ const router = createBrowserRouter([
                 path: "product",
                 element: <Product/>
             },
-            {
-                path: "user",
-                element: <User/>
-            },
-            {
-                path: "order",
-                element: <Order/>
-            }
         ]
     }
 ])

@@ -22,8 +22,8 @@ export default function Product() {
     productDescription: "",
     productBrand: "",
     productCategory: "",
-    productImage: [], // Store the files
-    imagePreview: [], // Store the image URLs for preview
+    productImage: [], 
+    imagePreview: [], 
   });
 
   const [isUpdateMode, setIsUpdateMode] = useState(false);

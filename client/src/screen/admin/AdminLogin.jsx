@@ -32,7 +32,7 @@ export default function AdminLogin() {
         navigate("/admin");
       })
       .catch((err) => {
-        localStorage.removeItem("adminToken"); // Remove token if login fails
+        localStorage.removeItem("adminToken"); 
         toast.error("Login failed");
       });
   };

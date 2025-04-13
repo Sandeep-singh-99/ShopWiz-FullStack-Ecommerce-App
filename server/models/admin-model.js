@@ -5,7 +5,7 @@ const adminSchema = new Schema({
     userId: {
         type: String,
         required: true,
-        unique: true, // Ensure the userId is unique
+        unique: true, 
     },
 
     password: {
@@ -14,6 +14,6 @@ const adminSchema = new Schema({
     }
 });
 
-const Admin = model('Admin', adminSchema);  // Change to use model name 'Admin' instead of 'admin'
+const Admin = model('Admin', adminSchema);  
 
 module.exports = Admin;

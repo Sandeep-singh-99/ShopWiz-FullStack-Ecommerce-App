@@ -34,7 +34,7 @@ export const GetComments = createAsyncThunk('comment/getComments', async (produc
 const commentSlice = createSlice({
     name: 'comment',
     initialState: {
-        comments: { data: [] },  // Ensure it starts as an object
+        comments: { data: [] }, 
         isError: false,
         data: null,
         isLoading: false
@@ -44,7 +44,7 @@ const commentSlice = createSlice({
             state.comments = { data: [] };
         },
         addCommentOptimistic: (state, action) => {
-            state.comments.data.unshift(action.payload); // Add new comment to the beginning
+            state.comments.data.unshift(action.payload);
         }
     },
     extraReducers: (builder) => {
@@ -56,7 +56,6 @@ const commentSlice = createSlice({
         builder.addCase(AddComment.fulfilled, (state, action) => {
             state.isLoading = false;
             state.data = action.payload;
-            // Backend response contains new comment, but we already optimistically updated the state
         });
 
         builder.addCase(AddComment.rejected, (state) => {
@@ -71,7 +70,7 @@ const commentSlice = createSlice({
 
         builder.addCase(GetComments.fulfilled, (state, action) => {
             state.isLoading = false;
-            state.comments = action.payload; // Replace with latest comments from backend
+            state.comments = action.payload; 
         });
 
         builder.addCase(GetComments.rejected, (state) => {

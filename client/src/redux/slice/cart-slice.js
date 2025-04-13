@@ -14,9 +14,8 @@ export const addCart = createAsyncThunk(
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("token")}`, // Retrieve token from localStorage or another secure location
           },
-          withCredentials: true, // Ensure cookies are sent with the request if needed
+          withCredentials: true,
         }
       );
       return response.data;
@@ -67,7 +66,7 @@ export const deleteCartProduct = createAsyncThunk(
       const response = await axios.delete(
         `${API_BASE_URL}/api/cart/delete-cart-product`,
         {
-          data: { _id: id }, // Send the `id` in the request body
+          data: { _id: id }, 
           headers: {
             "Content-Type": "application/json",
           },
@@ -88,7 +87,7 @@ export const updateToCartProduct = createAsyncThunk(
     try {
       const response = await axios.put(
         `${API_BASE_URL}/api/cart/update-cart-product`,
-        { _id, quantity }, // Send both the ID and new quantity in the body
+        { _id, quantity }, 
         {
           withCredentials: true,
         }
