@@ -5,7 +5,6 @@ import Home from "../screen/Home";
 import Login from "../components/Login";
 import Register from "../components/SignUp";
 import Profile from "../screen/Profile";
-import AdminLogin from "../screen/admin/AdminLogin";
 import AdminHome from "../screen/admin/AdminHome";
 import Product from "../screen/admin/Product";
 import CategoryProduct from "../screen/CategoryProduct";
@@ -71,11 +70,6 @@ const router = createBrowserRouter([
                 element: <OrderPage/>
             }
         ],
-    },
-
-    {
-        path: "admin-login",
-        element: <AdminLogin/>
     },
 
     {

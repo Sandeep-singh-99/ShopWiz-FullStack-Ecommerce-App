@@ -89,14 +89,12 @@ const addToCartViewProduct = async (req, res) => {
 
 const deleteCart = async (req, res) => {
   try {
-    // Use req.user.id instead of req.userId
-    const currentUserId = req.user.id;  // Corrected to req.user.id
+    const currentUserId = req.user.id;  
     const cartProductId = req.body._id;
 
-    // Make sure the user is only deleting their own cart product
     const deleteProduct = await Cart.deleteOne({ 
       _id: cartProductId, 
-      userId: currentUserId  // Ensure the product belongs to the current user
+      userId: currentUserId  
     });
 
     if (deleteProduct.deletedCount === 0) {

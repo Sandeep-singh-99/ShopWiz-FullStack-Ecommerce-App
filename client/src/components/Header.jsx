@@ -46,8 +46,8 @@ export default function Header() {
               <div>
                 <Link to={"profile"} className="flex items-center gap-2">
                 <img
-                src={user.data.imageUrl}
-                alt={user.data.username || "User"}
+                src={user.data?.imageUrl}
+                alt={user.data?.username || "User"}
                 className="h-12 w-12 rounded-full bg-blend-multiply object-contain"
                 />
                 </Link>

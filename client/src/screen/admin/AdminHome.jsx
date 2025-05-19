@@ -1,18 +1,8 @@
-import React, { useEffect } from "react";
 import { Tabs } from "antd";
-import { useNavigate } from "react-router-dom";
 import TabPane from "antd/es/tabs/TabPane";
 import Product from "./Product";
 
 export default function AdminHome() {
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    const token = localStorage.getItem("adminToken");
-    if (!token) {
-      navigate("/admin/login");
-    }
-  });
 
   return (
     <>
