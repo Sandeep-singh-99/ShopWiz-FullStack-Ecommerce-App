@@ -80,7 +80,7 @@ export default function Profile() {
             <button
               onClick={handleLogout}
               disabled={isLoggingOut}
-              className={`mt-4 w-full bg-gradient-to-r from-red-500 to-red-600 text-white font-semibold rounded-lg py-2.5 px-4 hover:from-red-600 hover:to-red-700 transition-all duration-200 shadow-md ${isLoggingOut ? "opacity-50 cursor-not-allowed" : ""}`}
+              className={`mt-4 w-full cursor-pointer bg-gradient-to-r from-red-500 to-red-600 text-white font-semibold rounded-lg py-2.5 px-4 hover:from-red-600 hover:to-red-700 transition-all duration-200 shadow-md ${isLoggingOut ? "opacity-50 cursor-not-allowed" : ""}`}
             >
               {isLoggingOut ? "Logging out..." : "Logout"}
             </button>

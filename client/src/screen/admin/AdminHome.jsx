@@ -1,8 +1,25 @@
 import { Tabs } from "antd";
 import TabPane from "antd/es/tabs/TabPane";
 import Product from "./Product";
+import { useSelector } from "react-redux";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 export default function AdminHome() {
+  const { isAuthenticated, user } = useSelector((state) => state.auth);
+
+  const navigate = useNavigate()
+
+   useEffect(() => {
+    if (!isAuthenticated || !user) {
+      toast.error("Access denied. Please log in as an admin.");
+      navigate("/");
+    } else if (user.data.role !== "admin") {
+      toast.error("Access denied. Admins only.");
+      navigate("/");
+    }
+  }, [isAuthenticated, user, navigate]);
 
   return (
     <>

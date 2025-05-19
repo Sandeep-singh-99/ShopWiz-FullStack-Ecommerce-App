@@ -10,6 +10,7 @@ const API_BASE_URL =  "http://localhost:5000";
 export default function Register() {
   const navigate = useNavigate();
   const dispatch = useDispatch()
+  const [isLoading, setIsLoading] = useState(false);
   const [uploadedImage, setUploadedImage] = useState(null);
   const [formData, setFormData] = useState({
     imageUrl: null,
@@ -36,6 +37,7 @@ export default function Register() {
   };
 
   const handleSubmit = async (e) => {
+    setIsLoading(true);
     e.preventDefault();
 
     const data = new FormData();
@@ -60,6 +62,7 @@ export default function Register() {
       if (response.status === 201 && response.data.success) {
         dispatch(login(response.data));
         toast.success("Registration successful");
+        setIsLoading(false);
         navigate("/");
       } else {
         toast.error(response.data.message || "Registration failed");
@@ -67,6 +70,7 @@ export default function Register() {
     } catch (error) {
       toast.error("Registration failed");
     }
+    setIsLoading(false);
   };
 
   return (
@@ -175,7 +179,7 @@ export default function Register() {
                 type="submit"
                 class="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
               >
-                Create an account
+                {isLoading ? "Loading..." : "Create an account"}
               </button>
               <p class="text-sm font-light text-gray-500 dark:text-gray-400">
                 Already have an account?{" "}

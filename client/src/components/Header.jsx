@@ -30,7 +30,7 @@ export default function Header() {
                 viewBox="0 0 24 24"
                 strokeWidth="1.5"
                 stroke="currentColor"
-                className="mt-4 h-6 w-6 text-white"
+                className="mt-4 h-7 w-7 text-white"
               >
                 <path
                   strokeLinecap="round"
@@ -48,7 +48,7 @@ export default function Header() {
                 <img
                 src={user.data?.imageUrl}
                 alt={user.data?.username || "User"}
-                className="h-12 w-12 rounded-full bg-blend-multiply object-contain"
+                className="h-14 w-14 rounded-full border-2 border-white object-cover"
                 />
                 </Link>
               </div>

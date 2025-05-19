@@ -148,11 +148,11 @@ export default function ProductDetails() {
                       e.preventDefault();
                       addToCart(product._id);
                     }}
-                    className="flex gap-2 items-center text-white bg-[#db4444] hover:bg-[#db4411] font-semibold px-6 py-2 rounded-md shadow-md transition-transform duration-300 hover:scale-105"
+                    className="flex cursor-pointer gap-2 items-center text-white bg-[#db4444] hover:bg-[#db4411] font-semibold px-6 py-2 rounded-md shadow-md transition-transform duration-300 hover:scale-105"
                   >
                     Add to Cart
                   </button>
-                  <button className="bg-gray-800 flex gap-2 items-center text-white font-semibold px-6 py-2 rounded-md shadow-md transition-transform duration-300 hover:scale-105">
+                  <button className="bg-gray-800 cursor-pointer flex gap-2 items-center text-white font-semibold px-6 py-2 rounded-md shadow-md transition-transform duration-300 hover:scale-105">
                     Buy Now
                   </button>
                 </div>
@@ -187,7 +187,7 @@ export default function ProductDetails() {
             </div>
             <button
               type="submit"
-              className="inline-flex items-center py-2.5 px-4 text-xs font-medium text-center text-white bg-primary-700 rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800"
+              className="inline-flex cursor-pointer items-center py-2.5 px-4 text-xs font-medium text-center text-white bg-primary-700 rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800"
             >
               Post comment
             </button>

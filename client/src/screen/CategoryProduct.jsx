@@ -208,7 +208,7 @@ export default function CategoryProduct() {
                             e.preventDefault();
                             addToCart(product._id);
                           }}
-                          className="bg-teal-500 text-white px-3 py-1 sm:px-4 sm:py-2 rounded-full hover:bg-teal-600 transition text-xs sm:text-sm"
+                          className="bg-teal-500 cursor-pointer text-white px-3 py-1 sm:px-4 sm:py-2 rounded-full hover:bg-teal-600 transition text-xs sm:text-sm"
                         >
                           Add
                         </button>

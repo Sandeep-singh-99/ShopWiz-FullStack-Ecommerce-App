@@ -10,6 +10,7 @@ const API_BASE_URL = "http://localhost:5000";
 export default function Login() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
 
   const [formData, setFormData] = useState({ email: "", password: "" });
 
@@ -18,6 +19,7 @@ export default function Login() {
   };
 
   const handleSubmit = async (e) => {
+    setIsLoading(true);
     e.preventDefault();
     if (!formData.email || !formData.password) {
       toast.warning("Please fill in all fields.");
@@ -37,10 +39,12 @@ export default function Login() {
         dispatch(login(response.data));
         navigate("/");
         toast.success("Login successful");
+        setIsLoading(false);
       } else {
         toast.error("Login failed");
       }
     } catch (error) {
+      setIsLoading(false);
       toast.error("Error logging in");
       console.error("Error: ", error);
     }
@@ -90,9 +94,9 @@ export default function Login() {
               </div>
               <button
                 type="submit"
-                class="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+                class="w-full cursor-pointer text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
               >
-                Sign in
+                {isLoading ? "Loading..." : "Sign in"}
               </button>
               <p class="text-sm font-light text-gray-500 dark:text-gray-400">
                 Don’t have an account yet?{" "}
