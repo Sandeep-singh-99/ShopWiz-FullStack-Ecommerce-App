@@ -69,7 +69,7 @@ const Login = async (req, res) => {
       });
     }
 
-    // Compare the provided password with the stored hashed password
+   
     const isMatch = await user.comparePassword(password);
 
     if (!isMatch) {
@@ -154,5 +154,21 @@ const adminLogin = async (req, res) => {
   }
 };
 
+const totalUsers = async (req, res) => {
+  try {
+    const totalUsers = await Auth.countDocuments();
+    res.status(200).json({
+      data: totalUsers,
+      message: "Total users fetched successfully",
+      success: true,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: error.message,
+      success: false,
+    });
+  }
+}
 
-module.exports = { register, Login, Logout, checkAuth, adminLogin };
+
+module.exports = { register, Login, Logout, checkAuth, adminLogin, totalUsers };

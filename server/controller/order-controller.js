@@ -40,4 +40,18 @@ const totalOrders = async (req, res) => {
     }
 }
 
-module.exports = { getOrders, totalOrders };
+const overAllOrders = async (req, res) => {
+    try {
+        const totalOrders = await Order.countDocuments();
+
+        if (totalOrders === 0) {
+            return res.status(404).json({ error: 'No orders found' });
+        } else {
+            res.status(200).json({ data: totalOrders, message: 'Total orders fetched successfully' });
+        }
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+}
+
+module.exports = { getOrders, totalOrders, overAllOrders };

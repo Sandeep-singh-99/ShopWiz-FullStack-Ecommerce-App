@@ -205,6 +205,23 @@ const updateProduct = async (req, res) => {
   }
 };
 
+const totalProducts = async (req, res) => {
+  try {
+    const totalProductsCount = await Product.countDocuments();
+
+    res.status(200).json({
+      message: "Total products fetched successfully",
+      success: true,
+      data: totalProductsCount,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: error.message,
+      success: false,
+    });
+  }
+}
+
 
 
 
@@ -213,4 +230,5 @@ module.exports = {
   getProducts,
   deleteProduct,
   updateProduct,
+  totalProducts
 };

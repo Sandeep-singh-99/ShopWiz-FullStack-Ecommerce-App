@@ -14,6 +14,8 @@ router.route('/admin-login').post(authController.adminLogin)
 
 router.route('/check-auth').get(authMiddleware, authController.checkAuth)
 
+router.route('/total-users').get(authController.totalUsers)
+
 module.exports = router;
 
 

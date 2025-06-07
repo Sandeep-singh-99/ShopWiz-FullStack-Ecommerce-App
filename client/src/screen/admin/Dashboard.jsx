@@ -1,29 +1,69 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { FiUsers, FiShoppingBag, FiFileText, FiDollarSign } from 'react-icons/fi';
+import { useDispatch, useSelector } from 'react-redux';
+import { totalUser } from '../../redux/slice/auth-slice';
+import { totalProduct } from '../../redux/slice/product-slice';
 
 export default function Dashboard() {
+  const { totalUsers } = useSelector((state) => state.auth);
+  const { totalProducts } = useSelector((state) => state.product);
+  const dispatch = useDispatch();
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    const fetchData = async () => {
+      setIsLoading(true);
+      setError(null);
+
+      try {
+        await Promise.all([
+          dispatch(totalUser()).unwrap(),
+          dispatch(totalProduct()).unwrap(),
+        ]);
+      } catch (err) {
+        if (isMounted) {
+          setError('Failed to fetch dashboard data. Please try again.');
+        }
+      } finally {
+        if (isMounted) {
+          setIsLoading(false);
+        }
+      }
+    };
+
+    fetchData();
+
+    return () => {
+      isMounted = false;
+    };
+
+  }, [dispatch]);
+
   const stats = [
     {
       title: 'Total Users',
-      value: 10,
+      value: isLoading ? 'Loading...' : error ? 'N/A' : totalUsers || 0,
       icon: <FiUsers className="w-6 h-6 text-blue-400" />,
       gradient: 'from-blue-500 to-blue-600',
     },
     {
       title: 'Total Products',
-      value: 10,
+      value: isLoading ? 'Loading...' : error ? 'N/A' : totalProducts || 0,
       icon: <FiShoppingBag className="w-6 h-6 text-green-400" />,
       gradient: 'from-green-500 to-green-600',
     },
     {
       title: 'Total Orders',
-      value: 10,
+      value: isLoading ? 'Loading...' : 10,
       icon: <FiFileText className="w-6 h-6 text-yellow-400" />,
       gradient: 'from-yellow-500 to-yellow-600',
     },
     {
       title: 'Total Revenue',
-      value: 10,
+      value: isLoading ? 'Loading...' : 10,
       icon: <FiDollarSign className="w-6 h-6 text-purple-400" />,
       gradient: 'from-purple-500 to-purple-600',
     },
@@ -39,6 +79,9 @@ export default function Dashboard() {
         <p className="mt-2 text-gray-500 text-lg">
           Welcome back! Here's an overview of your platform.
         </p>
+        {error && (
+          <p className="mt-2 text-red-500 text-lg">{error}</p>
+        )}
       </div>
 
       {/* Stats Grid */}

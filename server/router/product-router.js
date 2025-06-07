@@ -20,4 +20,6 @@ router.route('/updateProduct/:id').put(upload.any("images") ,productController.u
 
 router.route('/getProductById/:id').get(fetchProductById)
 
+router.route('/total-products').get(productController.totalProducts)
+
 module.exports = router

@@ -77,6 +77,20 @@ export const deleteProduct = createAsyncThunk(
 // );
 // ;
 
+
+export const totalProduct = createAsyncThunk('product/totalProduct', async (_, thunkApi) => {
+  try {
+    const response = await axios.get(`${API_BASE_URL}/api/product/total-products`, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    return response.data.data;
+  } catch (error) {
+    return thunkApi.rejectWithValue(error.response.data);
+  }
+});
+
 const productSlice = createSlice({
   name: "product",
   initialState: {
@@ -84,6 +98,7 @@ const productSlice = createSlice({
     data: null,
     error: null,
     loading: false,
+    totalProducts: 0,
   },
   extraReducers: (builder) => {
     builder.addCase(fetchProduct.fulfilled, (state, action) => {
@@ -149,6 +164,18 @@ const productSlice = createSlice({
       state.loading = false;
       state.error = action.payload;
     });
+
+    builder.addCase(totalProduct.fulfilled, (state, action) => {
+      state.totalProducts = action.payload || 0;
+      state.loading = false;
+      state.error = null;
+    });
+
+    builder.addCase(totalProduct.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    });
+
 
 
 //     builder.addCase(updateProduct.fulfilled, (state, action) => {
