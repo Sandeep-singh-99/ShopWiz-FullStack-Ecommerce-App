@@ -3,12 +3,12 @@ import { FiUsers, FiShoppingBag, FiFileText, FiDollarSign } from 'react-icons/fi
 import { useDispatch, useSelector } from 'react-redux';
 import { totalUser } from '../../redux/slice/auth-slice';
 import { totalProduct } from '../../redux/slice/product-slice';
-import { totalAmount, totalOrder } from '../../redux/slice/order-slice';
+import { getTopSellingProducts, totalAmount, totalOrder } from '../../redux/slice/order-slice';
 
 export default function Dashboard() {
   const { totalUsers } = useSelector((state) => state.auth);
   const { totalProducts } = useSelector((state) => state.product);
-  const { totalOrderAllUsers, totalOrderAmount } = useSelector((state) => state.order);
+  const { totalOrderAllUsers, totalOrderAmount, topSellingProducts } = useSelector((state) => state.order);
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -26,6 +26,7 @@ export default function Dashboard() {
           dispatch(totalProduct()).unwrap(),
           dispatch(totalOrder()).unwrap(),
           dispatch(totalAmount()).unwrap(),
+          dispatch(getTopSellingProducts()).unwrap(),
         ]);
       } catch (err) {
         if (isMounted) {
@@ -109,6 +110,64 @@ export default function Dashboard() {
             <div className="absolute inset-0 bg-white opacity-0 hover:opacity-10 transition-opacity duration-300 rounded-2xl" />
           </div>
         ))}
+      </div>
+
+       {/* Top Selling Products Section */}
+      <div className="mt-12">
+        <h2 className="text-2xl font-bold text-gray-900 mb-6">Top Selling Products</h2>
+        {isLoading ? (
+          <ul className="space-y-4">
+            {[...Array(3)].map((_, index) => (
+              <li
+                key={index}
+                className="bg-white p-4 rounded-xl shadow-md animate-pulse flex items-center space-x-4"
+              >
+                <div className="w-16 h-16 bg-gray-200 rounded-lg"></div>
+                <div className="flex-1">
+                  <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
+                  <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+                </div>
+              </li>
+            ))}
+          </ul>
+        ) : topSellingProducts.length > 0 ? (
+          <ul className="space-y-4">
+            {topSellingProducts.map((product) => (
+              <li
+                key={product._id}
+                className="bg-white p-4 rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 flex items-center space-x-4"
+              >
+                <div className="w-16 h-16 flex-shrink-0">
+                  <img
+                    src={product.productDetails[0]?.productImage[0] || 'https://via.placeholder.com/150'}
+                    alt={product.productDetails[0]?.productName}
+                    className="w-full h-full object-contain rounded-lg"
+                    onError={(e) => (e.target.src = 'https://via.placeholder.com/150')}
+                  />
+                </div>
+                <div className="flex-1">
+                  <h3 className="text-base font-semibold text-gray-900 truncate">
+                    {product.productDetails[0]?.productName}
+                  </h3>
+                  <p className="text-gray-600 text-sm">{product.productDetails[0]?.productBrand}</p>
+                  <p className="text-gray-500 text-sm">{product.productDetails[0]?.productCategory}</p>
+                  <div className="flex items-center space-x-2 mt-1">
+                    <p className="text-green-600 font-semibold">
+                      ${product.productDetails[0]?.salesPrice.toFixed(2)}
+                    </p>
+                    {product.productDetails[0]?.productPrice > product.productDetails[0]?.salesPrice && (
+                      <p className="text-gray-400 line-through text-sm">
+                        ${product.productDetails[0]?.productPrice.toFixed(2)}
+                      </p>
+                    )}
+                  </div>
+                </div>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p className="mt-8 text-gray-500 text-center">No top selling products available.</p>
+        )}
       </div>
     </div>
   );

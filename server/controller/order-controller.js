@@ -80,4 +80,25 @@ const getTotoalAmount = async (req, res) => {
   }
 };
 
-module.exports = { getOrders, totalOrders, overAllOrders, getTotoalAmount };
+
+const topSellingProducts = async (req, res) => {
+  try {
+    const products = await Order.aggregate([
+      { $unwind: "$items" },
+      { $group: { _id: "$items.productId", totalSold: { $sum: "$items.quantity" } } },
+      { $sort: { totalSold: -1 } },
+      { $limit: 10 },
+    ]).lookup({
+      from: "products",
+      localField: "_id",
+      foreignField: "_id",
+      as: "productDetails",
+    });
+
+    res.status(200).json({ data: products, message: "Top selling products fetched successfully" });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+module.exports = { getOrders, totalOrders, overAllOrders, getTotoalAmount, topSellingProducts };
