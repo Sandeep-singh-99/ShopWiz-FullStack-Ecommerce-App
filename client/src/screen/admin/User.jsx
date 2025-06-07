@@ -21,7 +21,7 @@ export default function User() {
           <table className="min-w-full bg-white">
             <thead className="bg-gray-100">
               <tr>
-                <th className="py-3 px-6 text-left text-sm font-semibold text-gray-700">#</th>
+                <th className="py-3 px-6 text-left text-sm font-semibold text-gray-700">No</th>
                 <th className="py-3 px-6 text-left text-sm font-semibold text-gray-700">User Image</th>
                 <th className="py-3 px-6 text-left text-sm font-semibold text-gray-700">Username</th>
                 <th className="py-3 px-6 text-left text-sm font-semibold text-gray-700">Email</th>
@@ -39,7 +39,7 @@ export default function User() {
                     <img
                       src={user?.imageUrl || img}
                       alt={user.username}
-                      className="w-12 h-12 rounded-full"
+                      className="w-12 h-12 rounded-full object-cover"
                     />
                   </td>
                   <td className="py-4 px-6 text-gray-600">{user.username}</td>

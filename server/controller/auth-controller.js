@@ -173,7 +173,7 @@ const totalUsers = async (req, res) => {
 
 const getAllUsers = async (req, res) => {
   try {
-    const users = await Auth.find().lean().sort({ createdAt: -1 });
+    const users = await Auth.find().lean()
     res.status(200).json({
       data: users,
       message: "All users fetched successfully",
