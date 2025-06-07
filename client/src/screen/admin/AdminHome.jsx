@@ -6,6 +6,7 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import Dashboard from "./Dashboard";
+import User from "./User";
 
 export default function AdminHome() {
   const { isAuthenticated, user } = useSelector((state) => state.auth);
@@ -37,7 +38,10 @@ export default function AdminHome() {
           <TabPane tab="Dashboard" key={"0"}>
             <Dashboard/>
           </TabPane>
-          <TabPane tab="Product" key="1">
+          <TabPane tab="Users" key="1">
+            <User />
+          </TabPane>
+          <TabPane tab="Product" key="2">
             <Product />
           </TabPane>
         </Tabs>

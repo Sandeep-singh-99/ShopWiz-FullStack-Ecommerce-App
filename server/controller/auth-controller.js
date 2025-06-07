@@ -171,4 +171,21 @@ const totalUsers = async (req, res) => {
 }
 
 
-module.exports = { register, Login, Logout, checkAuth, adminLogin, totalUsers };
+const getAllUsers = async (req, res) => {
+  try {
+    const users = await Auth.find().lean().sort({ createdAt: -1 });
+    res.status(200).json({
+      data: users,
+      message: "All users fetched successfully",
+      success: true,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: error.message,
+      success: false,
+    });
+  }
+}
+
+
+module.exports = { register, Login, Logout, checkAuth, adminLogin, totalUsers, getAllUsers };

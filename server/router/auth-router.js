@@ -16,6 +16,8 @@ router.route('/check-auth').get(authMiddleware, authController.checkAuth)
 
 router.route('/total-users').get(authController.totalUsers)
 
+router.route('/get-all-users').get(authController.getAllUsers)
+
 module.exports = router;
 
 

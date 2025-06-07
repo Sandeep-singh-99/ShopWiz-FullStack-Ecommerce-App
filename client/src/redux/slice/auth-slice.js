@@ -60,12 +60,26 @@ export const totalUser = createAsyncThunk('auth/totalUsers', async (_, thunkApi)
   }
 });
 
+export const getAllUsers = createAsyncThunk('auth/getAllUsers', async (_, thunkApi) => {
+  try {
+    const response = await axios.get(`${API_BASE_URL}/api/auth/get-all-users`, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    return response.data.data;
+  } catch (error) {
+    return thunkApi.rejectWithValue(error.response.data);
+  }
+});
+
 const initialState = {
   isLoading: false,
   isAuthenticated: false, 
   error: null,
   user: null,
   totalUsers: 0,
+  allUsers: []
 };
 
 const authSlice = createSlice({
@@ -109,7 +123,19 @@ const authSlice = createSlice({
       .addCase(totalUser.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload;
-      });
+      })
+      .addCase(getAllUsers.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(getAllUsers.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.allUsers = action.payload || [];
+      })
+      .addCase(getAllUsers.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
+      })
   },
 });
 

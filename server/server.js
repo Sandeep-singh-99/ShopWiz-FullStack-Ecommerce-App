@@ -38,7 +38,7 @@ if (cluster.isMaster) {
 
   const limiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 1000,
+    max: 100000,
     message: {
       status: 429,
       message:
