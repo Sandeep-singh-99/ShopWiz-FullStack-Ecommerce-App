@@ -3,10 +3,12 @@ import { FiUsers, FiShoppingBag, FiFileText, FiDollarSign } from 'react-icons/fi
 import { useDispatch, useSelector } from 'react-redux';
 import { totalUser } from '../../redux/slice/auth-slice';
 import { totalProduct } from '../../redux/slice/product-slice';
+import { totalOrder } from '../../redux/slice/order-slice';
 
 export default function Dashboard() {
   const { totalUsers } = useSelector((state) => state.auth);
   const { totalProducts } = useSelector((state) => state.product);
+  const { totalOrders } = useSelector((state) => state.order);
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -22,6 +24,7 @@ export default function Dashboard() {
         await Promise.all([
           dispatch(totalUser()).unwrap(),
           dispatch(totalProduct()).unwrap(),
+          dispatch(totalOrder()).unwrap(),
         ]);
       } catch (err) {
         if (isMounted) {
@@ -57,13 +60,13 @@ export default function Dashboard() {
     },
     {
       title: 'Total Orders',
-      value: isLoading ? 'Loading...' : 10,
+      value: isLoading ? 'Loading...' : error ? 'N/A' : totalOrders || 0,
       icon: <FiFileText className="w-6 h-6 text-yellow-400" />,
       gradient: 'from-yellow-500 to-yellow-600',
     },
     {
       title: 'Total Revenue',
-      value: isLoading ? 'Loading...' : 10,
+      value: isLoading ? 'Loading...' : error ? 'N/A' : '$0.00', 
       icon: <FiDollarSign className="w-6 h-6 text-purple-400" />,
       gradient: 'from-purple-500 to-purple-600',
     },
