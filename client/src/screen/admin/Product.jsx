@@ -128,7 +128,7 @@ export default function Product() {
         productDescription: formData.productDescription,
         productBrand: formData.productBrand,
         productCategory: formData.productCategory,
-        productImage: formData.imagePreview, // Use URLs or base64 strings for images
+        productImage: formData.imagePreview, 
       };
 
       const response = await axios.put(
@@ -138,6 +138,7 @@ export default function Product() {
           headers: {
             "Content-Type": "application/json",
           },
+          withCredentials: true, 
         }
       );
 

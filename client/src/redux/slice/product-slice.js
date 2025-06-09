@@ -8,7 +8,7 @@ export const fetchProduct = createAsyncThunk(
   async (_, thunkApi) => {
     try {
       const response = await axios.post(
-        `${API_BASE_URL}/api/product/getProduct`
+        `${API_BASE_URL}/api/product/getProduct`, {}, {withCredentials: true, headers: { "Content-Type": "application/json" } },
       );
       return response.data;
     } catch (error) {
@@ -37,6 +37,7 @@ export const addProduct = createAsyncThunk(
           headers: {
             "Content-Type": "multipart/form-data",
           },
+          withCredentials: true,
         }
       );
       return response.data;
@@ -51,7 +52,7 @@ export const deleteProduct = createAsyncThunk(
   async (id, thunkApi) => {
     try {
       const response = await axios.delete(
-        `${API_BASE_URL}/api/product/deleteProduct/${id}`
+        `${API_BASE_URL}/api/product/deleteProduct/${id}`,{withCredentials: true, headers: { "Content-Type": "application/json" } }
       );
       return response.data;
     } catch (error) {
