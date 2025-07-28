@@ -50,9 +50,6 @@ JWT_SECRET_TOKEN=your_jwt_secret
 IMAGEKIT_PUBLIC_KEY=your_imagekit_key
 IMAGEKIT_PRIVATE_KEY=your_imagekit_secret
 IMAGEKIT_URL_ENDPOINT=your_imagekit_url
-CLOUDINARY_CLOUD_NAME=your_cloudinary_name
-CLOUDINARY_API_KEY=your_cloudinary_api_key
-CLOUDINARY_API_SECRET=your_cloudinary_api_secret
 PAYTM_MERCHANT_ID=your_paytm_id
 PAYTM_MERCHANT_KEY=your_paytm_key
 
