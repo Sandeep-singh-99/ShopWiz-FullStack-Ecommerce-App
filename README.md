@@ -1,68 +1,61 @@
-# ShopWiz E-Commerce Project
+# 🛍️ ShopWiz - Full-Stack E-commerce App
 
-## Overview
-ShopWiz is a full-stack e-commerce application that allows users to browse products, add them to the cart, and make purchases. The application also includes an admin panel for managing products, users, and orders.
+ShopWiz is a powerful and scalable full-stack e-commerce web application built with the MERN stack. It features secure user authentication, product management, real-time cart, Paytm payment integration, and modern UI/UX using Ant Design.
 
-## Technologies Used
+---
 
-### Frontend
-- **React**: A JavaScript library for building user interfaces.
-- **Redux**: A predictable state container for JavaScript apps.
-- **React Router**: A collection of navigational components for React applications.
-- **Tailwind CSS**: A utility-first CSS framework for rapid UI development.
-- **Ant Design**: A design system for enterprise-level products.
-- **Axios**: A promise-based HTTP client for the browser and Node.js.
-- **React Icons**: A collection of popular icons for React projects.
+## ✨ Features
 
-### Backend
-- **Node.js**: A JavaScript runtime built on Chrome's V8 JavaScript engine.
-- **Express**: A minimal and flexible Node.js web application framework.
-- **MongoDB**: A NoSQL database for storing application data.
-- **Mongoose**: An ODM (Object Data Modeling) library for MongoDB and Node.js.
-- **JWT (JSON Web Tokens)**: A compact, URL-safe means of representing claims to be transferred between two parties.
-- **Cloudinary**: A cloud-based service for managing images and videos.
-- **Multer**: A middleware for handling `multipart/form-data`, which is primarily used for uploading files.
-- **Node Cache**: A caching library for Node.js.
+- 🛒 User-friendly e-commerce interface with dynamic product listing and search
+- 🔐 JWT-based authentication using HTTP-only cookies and bcrypt
+- 🧑‍💼 Admin panel to manage products and users
+- 📦 Cart and order management with persistent state
+- 💳 Integrated Paytm payment gateway for secure transactions
+- ☁️ Image uploads via ImageKit (Cloudinary supported too)
+- ⚡ Performance optimized with clustering and Node.js cache
+- 🛡️ Rate limiting and CORS protection for security
+- 📧 Email support via Resend (optional)
+- 🎨 Responsive UI with Ant Design + TailwindCSS
+- 🌙 Dark/Light mode support (via `next-themes`)
+- 📦 Backend APIs with Express and MongoDB
 
-### DevOps and Utilities
-- **dotenv**: A zero-dependency module that loads environment variables from a `.env` file into `process.env`.
-- **cookie-parser**: A middleware to parse cookies attached to the client request object.
-- **cors**: A middleware to enable Cross-Origin Resource Sharing.
-- **morgan**: A HTTP request logger middleware for Node.js.
-- **express-rate-limit**: A middleware to limit repeated requests to public APIs and/or endpoints.
-- **cluster**: A Node.js module that allows you to create child processes that all share server ports.
+---
 
-## Project Structure
+## 🛠️ Tech Stack
 
-```
-ShopWiz/
-├── client/
-│   ├── public/
-│   ├── src/
-│   │   ├── components/
-│   │   ├── helpers/
-│   │   ├── redux/
-│   │   ├── route/
-│   │   ├── screen/
-│   │   ├── App.js
-│   │   ├── index.js
-│   │   ├── index.css
-│   ├── .gitignore
-│   ├── package.json
-│   ├── README.md
-│   ├── tailwind.config.js
-├── server/
-│   ├── config/
-│   ├── controller/
-│   ├── middleware/
-│   ├── models/
-│   ├── router/
-│   ├── .gitignore
-│   ├── .env
-│   ├── package.json
-│   ├── server.js
-├── read.md
-```
+### 📌 Frontend
+- **React** with **Vite**
+- **Redux Toolkit** & **React-Redux**
+- **React Router DOM**
+- **Ant Design** (AntD)
+- **Tailwind CSS**
+- **Axios** (with interceptors)
+- **Next Themes** for Dark/Light mode
+
+### 📌 Backend
+- **Node.js**, **Express.js**
+- **MongoDB** with **Mongoose**
+- **JWT + HTTP-only Cookies** for secure auth
+- **bcrypt.js** for password hashing
+- **Paytm Payment Gateway**
+- **Multer** for image/file uploads
+- **Node Cache**, **Express Rate Limit**
+- **CORS**, **Helmet** for security
+- **Cluster** for multi-core performance
+
+### ☁️ Services & Env Variables
+```env
+MONGO_URI=your_mongodb_uri
+JWT_SECRET_TOKEN=your_jwt_secret
+IMAGEKIT_PUBLIC_KEY=your_imagekit_key
+IMAGEKIT_PRIVATE_KEY=your_imagekit_secret
+IMAGEKIT_URL_ENDPOINT=your_imagekit_url
+CLOUDINARY_CLOUD_NAME=your_cloudinary_name
+CLOUDINARY_API_KEY=your_cloudinary_api_key
+CLOUDINARY_API_SECRET=your_cloudinary_api_secret
+PAYTM_MERCHANT_ID=your_paytm_id
+PAYTM_MERCHANT_KEY=your_paytm_key
+
 
 ## Getting Started
 
@@ -97,16 +90,3 @@ ShopWiz/
    cd ../client
    npm start
    ```
-
-### Environment Variables
-Create a `.env` file in the `server` directory and add the following environment variables:
-```
-MONGO_URI=your_mongodb_uri
-JWT_SECRET_TOKEN=your_jwt_secret
-CLOUDINARY_CLOUD_NAME=your_cloudinary_cloud_name
-CLOUDINARY_API_KEY=your_cloudinary_api_key
-CLOUDINARY_API_SECRET=your_cloudinary_api_secret
-```
-
-## License
-This project is licensed under the MIT License.
