@@ -45,6 +45,7 @@ ShopWiz is a powerful and scalable full-stack e-commerce web application built w
 
 ### ☁️ Services & Env Variables
 ```env
+PORT=
 MONGO_URI=your_mongodb_uri
 JWT_SECRET_TOKEN=your_jwt_secret
 IMAGEKIT_PUBLIC_KEY=your_imagekit_key
@@ -52,7 +53,7 @@ IMAGEKIT_PRIVATE_KEY=your_imagekit_secret
 IMAGEKIT_URL_ENDPOINT=your_imagekit_url
 PAYTM_MERCHANT_ID=your_paytm_id
 PAYTM_MERCHANT_KEY=your_paytm_key
-
+```
 
 ## Getting Started
 
