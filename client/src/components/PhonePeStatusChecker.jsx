@@ -11,7 +11,7 @@ const PhonePeStatusChecker = () => {
     const checkStatus = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:5000/api/payment/status/${merchantTransactionId}`,
+          `${import.meta.env.VITE_API_URL}/api/payment/status/${merchantTransactionId}`,
           { withCredentials: true }
         );
 

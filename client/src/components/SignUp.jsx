@@ -5,7 +5,7 @@ import axios from "axios";
 import { useDispatch } from "react-redux";
 import { login } from "../redux/slice/auth-slice";
 
-const API_BASE_URL =  "http://localhost:5000";
+const API_BASE_URL =  import.meta.env.VITE_API_URL || "http://localhost:5000";
 
 export default function Register() {
   const navigate = useNavigate();

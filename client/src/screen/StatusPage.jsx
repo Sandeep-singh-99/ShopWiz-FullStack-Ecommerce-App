@@ -21,7 +21,7 @@ const StatusPage = () => {
 
       try {
         const response = await axios.get(
-          `http://localhost:5000/api/payment/status/${transactionId}`,
+          `${import.meta.env.VITE_API_URL}/api/payment/status/${transactionId}`,
           { withCredentials: true }
         );
 

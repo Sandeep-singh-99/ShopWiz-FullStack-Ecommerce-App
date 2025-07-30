@@ -10,7 +10,7 @@ const PhonePePaymentButton = ({
   const initiatePayment = async () => {
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/payment/initiate",
+        `${import.meta.env.VITE_API_URL}/api/payment/initiate`,
         {
           amount,
           cartItems: cartItems.map((item) => ({
