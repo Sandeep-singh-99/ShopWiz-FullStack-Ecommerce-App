@@ -56,7 +56,7 @@ export default function HorizontalCategory() {
               onKeyDown={(e) => e.key === "Enter" && navigate(`/category/${item.name}`)}
             >
               {/* Category Image */}
-              <div className="w-28 h-28 sm:w-32 sm:h-32 md:w-36 md:h-36 bg-white rounded-lg overflow-hidden flex items-center justify-center border border-gray-100 transition-all duration-300 group-hover:border-indigo-200 group-hover:shadow-md">
+              <div className="w-28 h-28 sm:w-32 sm:h-32 md:w-36 md:h-36 bg-white rounded-lg overflow-hidden flex items-center justify-center border border-gray-300 transition-all duration-300 group-hover:border-indigo-200 group-hover:shadow-md">
                 <img
                   loading="lazy"
                   className="w-full h-full object-contain p-4 transition-transform duration-300 ease-in-out group-hover:scale-105"
@@ -67,9 +67,9 @@ export default function HorizontalCategory() {
                 />
               </div>
               {/* Category Name */}
-              <span className="mt-3 text-sm sm:text-base text-center font-semibold text-gray-800 transition-colors duration-300 group-hover:text-indigo-600">
+              {/* <span className="mt-3 text-sm sm:text-base text-center font-semibold text-gray-800 transition-colors duration-300 group-hover:text-indigo-600">
                 {item.name}
-              </span>
+              </span> */}
             </div>
           ))}
         </div>
