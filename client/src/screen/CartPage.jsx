@@ -63,7 +63,7 @@ export default function CartPage() {
 
   // Calculate subtotal
   const subtotal = cartItems.reduce(
-    (sum, item) => sum + item.productId.salesPrice * item.quantity,
+    (sum, item) => sum + item.productId?.salesPrice * item.quantity,
     0
   );
 
@@ -97,20 +97,20 @@ export default function CartPage() {
                   className="bg-white rounded-xl shadow-md p-6 flex flex-col sm:flex-row gap-6 hover:shadow-lg transition-shadow duration-300"
                 >
                   <img
-                    src={item.productId.productImage[0]}
-                    alt={item.productId.productName}
+                    src={item.productId?.productImage[0]}
+                    alt={item.productId?.productName}
                     className="w-32 h-32 sm:w-40 sm:h-40 object-contain rounded-md border border-gray-200 bg-gray-50"
                   />
                   <div className="flex-1 flex flex-col justify-between">
                     <div>
                       <h2 className="text-xl font-semibold text-gray-800">
-                        {item.productId.productName}
+                        {item.productId?.productName}
                       </h2>
                       <p className="text-sm text-gray-500">
-                        {item.productId.productBrand}
+                        {item.productId?.productBrand}
                       </p>
                       <p className="text-lg font-bold text-indigo-600 mt-2">
-                        ₹{item.productId.salesPrice.toLocaleString()}
+                        ₹{item.productId?.salesPrice.toLocaleString()}
                       </p>
                     </div>
                     <div className="flex items-center gap-2 text-green-600 text-sm mt-2">
