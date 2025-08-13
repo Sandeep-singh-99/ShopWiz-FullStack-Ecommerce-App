@@ -170,7 +170,7 @@ export default function Product() {
 
   const handleDelete = async (id) => {
     try {
-      dispatch(deleteProduct(id));
+      dispatch(deleteProduct(id))
       message.success("Product deleted successfully");
     } catch (err) {
       message.error(`Error deleting product: ${err.message}`);

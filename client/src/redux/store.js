@@ -11,7 +11,7 @@ import orderSlice from "./slice/order-slice";
 const persistConfig = {
   key: "root",  
   storage,     
-  whitelist: ["auth", "cart"], 
+  whitelist: ["auth", "cart", "product"], 
 };
 
 
