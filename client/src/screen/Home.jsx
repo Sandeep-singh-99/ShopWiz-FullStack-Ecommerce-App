@@ -39,20 +39,6 @@ export default function Home() {
   }, [isAuthenticated, dispatch]);
 
   return (
-    // <div className="">
-    //   <div className="flex flex-col gap-5">
-    //     <CarouselView />
-    //     <HorizontalCategory />
-    //     {productCategories.map(({ category, heading }) => (
-    //       <HorizontalCardProduct
-    //         key={category}
-    //         category={category}
-    //         heading={heading}
-    //       />
-    //     ))}
-    //   </div>
-    // </div>
-
     <div className="bg-gray-100 min-h-screen">
       <div className="flex flex-col gap-8">
         <CarouselView />
