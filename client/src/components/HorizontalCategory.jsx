@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import img1 from "../assets/category/mouse.webp";
 import img2 from "../assets/category/airpodes.webp";
@@ -15,6 +15,7 @@ import img12 from "../assets/category/watch.webp";
 
 export default function HorizontalCategory() {
   const navigate = useNavigate();
+  const scrollContainerRef = useRef(null);
 
   const categories = [
     { id: 1, name: "Mouse", img: img1 },
@@ -31,45 +32,64 @@ export default function HorizontalCategory() {
     { id: 12, name: "Watches", img: img12 },
   ];
 
+  const scroll = (direction) => {
+    const container = scrollContainerRef.current;
+    const scrollAmount = 200;
+    if (container) {
+      container.scrollBy({
+        left: direction === "left" ? -scrollAmount : scrollAmount,
+        behavior: "smooth",
+      });
+    }
+  };
+
   return (
-    <section className="container mx-auto py-8 px-4 sm:px-6 lg:px-8 bg-gray-50">
+    <section className="container mx-auto py-10 px-4 sm:px-6 lg:px-8">
       {/* Section Heading */}
-      <div className="flex items-center mb-6">
+      <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl sm:text-3xl font-bold text-gray-900">
           Explore Categories
         </h2>
+        <button
+          onClick={() => navigate("/categories")}
+          className="text-indigo-600 hover:text-indigo-800 font-medium text-sm transition"
+        >
+          View All →
+        </button>
       </div>
 
       {/* Category Container */}
       <div className="relative">
         <div
-          className="flex overflow-x-auto space-x-4 pb-4 sm:grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4 sm:overflow-x-hidden snap-x snap-mandatory scrollbar-hide"
+          ref={scrollContainerRef}
+          className="flex overflow-x-auto space-x-6 pb-3 scrollbar-hide snap-x snap-mandatory"
           style={{ scrollBehavior: "smooth" }}
         >
           {categories.map((item) => (
             <div
               key={item.id}
-              className="flex-shrink-0 w-36 sm:w-auto cursor-pointer group transition-all duration-300 ease-in-out rounded-lg p-3 "
+              className="flex-shrink-0 w-28 sm:w-32 md:w-36 cursor-pointer group"
               onClick={() => navigate(`/category/${item.name}`)}
               role="button"
               tabIndex={0}
               onKeyDown={(e) => e.key === "Enter" && navigate(`/category/${item.name}`)}
             >
-              {/* Category Image */}
-              <div className="w-28 h-28 sm:w-32 sm:h-32 md:w-36 md:h-36 bg-white rounded-lg overflow-hidden flex items-center justify-center border border-gray-300 transition-all duration-300 group-hover:border-indigo-200 group-hover:shadow-md">
-                <img
-                  loading="lazy"
-                  className="w-full h-full object-contain p-4 transition-transform duration-300 ease-in-out group-hover:scale-105"
-                  src={item.img}
-                  alt={`Shop ${item.name} category`}
-                  width="100%"
-                  height="100%"
-                />
+              {/* Category Card */}
+              <div className="bg-white rounded-xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 group-hover:border-indigo-300">
+                <div className="w-full h-28 sm:h-32 flex items-center justify-center overflow-hidden">
+                  <img
+                    loading="lazy"
+                    className="w-20 h-20 sm:w-24 sm:h-24 object-contain transform transition-transform duration-300 group-hover:scale-110"
+                    src={item.img}
+                    alt={`Shop ${item.name} category`}
+                  />
+                </div>
               </div>
+
               {/* Category Name */}
-              {/* <span className="mt-3 text-sm sm:text-base text-center font-semibold text-gray-800 transition-colors duration-300 group-hover:text-indigo-600">
+              <p className="mt-3 text-sm text-center font-semibold text-gray-800 group-hover:text-indigo-600 transition">
                 {item.name}
-              </span> */}
+              </p>
             </div>
           ))}
         </div>
@@ -79,9 +99,7 @@ export default function HorizontalCategory() {
           <button
             aria-label="Scroll left"
             className="bg-white p-2 rounded-full shadow-md hover:bg-gray-100 transition-colors duration-200"
-            onClick={() =>
-              document.querySelector(".snap-x").scrollBy({ left: -150, behavior: "smooth" })
-            }
+            onClick={() => scroll("left")}
           >
             <svg
               className="w-5 h-5 text-gray-600"
@@ -100,9 +118,7 @@ export default function HorizontalCategory() {
           <button
             aria-label="Scroll right"
             className="bg-white p-2 rounded-full shadow-md hover:bg-gray-100 transition-colors duration-200"
-            onClick={() =>
-              document.querySelector(".snap-x").scrollBy({ left: 150, behavior: "smooth" })
-            }
+            onClick={() => scroll("right")}
           >
             <svg
               className="w-5 h-5 text-gray-600"
