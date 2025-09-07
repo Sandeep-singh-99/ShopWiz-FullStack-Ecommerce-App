@@ -48,7 +48,7 @@ export default function Header() {
                 <img
                 src={user.data?.imageUrl}
                 alt={user.data?.username || "User"}
-                className="h-14 w-14 rounded-full border-2 border-white object-cover"
+                className="h-12 w-12 rounded-full border-2 border-white object-cover"
                 />
                 </Link>
               </div>
