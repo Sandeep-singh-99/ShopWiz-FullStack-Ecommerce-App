@@ -14,6 +14,7 @@ import StatusPage from "../screen/StatusPage";
 import PaymentSuccess from "../screen/PaymentSuccess";
 import PaymentFailed from "../screen/PaymentFailed";
 import OrderPage from "../screen/OrderPage";
+import NotFound from "../screen/NotFound";
 
 const router = createBrowserRouter([
     {
@@ -68,6 +69,10 @@ const router = createBrowserRouter([
             {
                 path: "order",
                 element: <OrderPage/>
+            },
+            {
+                path: "*",
+                element: <NotFound />
             }
         ],
     },
