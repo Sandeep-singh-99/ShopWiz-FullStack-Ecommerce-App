@@ -6,7 +6,7 @@ import { Toaster } from "react-hot-toast";
 function App() {
   const location = useLocation();
   const hideHeader = ["/admin-login", "/admin-home"];
-  const hideFooter = ["/admin-login", "/admin-home", "/register", "/login"];
+  const hideFooter = ["/admin-login", "/admin-home"];
   
   return (
     <>
