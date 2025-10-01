@@ -1,6 +1,7 @@
 const Product = require("../models/product-model");
 
-export const searchController = async (req, res) => {
+
+const searchController = async (req, res) => {
     try {
         const { query, page = 1, limit = 10, minPrice, maxPrice, category } = req.query;
 
@@ -43,3 +44,6 @@ export const searchController = async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 }
+
+
+module.exports = { searchController };

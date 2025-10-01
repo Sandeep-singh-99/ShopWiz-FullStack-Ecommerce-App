@@ -68,7 +68,7 @@ if (cluster.isMaster) {
   app.use("/api/comment", commentRouter);
   app.use("/api/payment", paymentRouter);
   app.use("/api/order", orderRouter);
-  app.use("/api", searchRouter);
+  app.use("/api/products", searchRouter);
 
   app.use((err, req, res, next) => {
     console.log("Error: ", err.stack);

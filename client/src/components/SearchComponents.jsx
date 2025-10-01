@@ -1,82 +1,96 @@
-import React, { useState } from "react";
-import { Modal, Input, List, Spin, Empty } from "antd";
+import React, { useEffect } from "react";
+import { Modal, Input, List, Spin, Empty, Button } from "antd";
+import { useDispatch, useSelector } from "react-redux";
+import { setQuery, resetSearch, fetchSearchResults } from "../redux/slice/search-slice";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-export default function SearchComponents({ open, onClose }) {
-  const [searchValue, setSearchValue] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [results, setResults] = useState([]);
+export default function SearchComponent({ open, onClose }) {
+ const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const { query, results, loading } = useSelector((state) => state.search);
 
   
   const handleSearch = (value) => {
-    setLoading(true);
-    setTimeout(() => {
-      const mockProducts = [
-        { id: 1, name: "iPhone 15 Pro Max", price: "$1200" },
-        { id: 2, name: "Samsung Galaxy S24 Ultra", price: "$1100" },
-        { id: 3, name: "Sony WH-1000XM5 Headphones", price: "$399" },
-      ];
-      const filtered = mockProducts.filter((p) =>
-        p.name.toLowerCase().includes(value.toLowerCase())
-      );
-      setResults(filtered);
-      setLoading(false);
-    }, 1000);
+    dispatch(setQuery(value));
+    if (value.trim()) {
+      dispatch(fetchSearchResults({ query: value, page: 1, limit: 10 }));
+    }
   };
 
-  return (
-    <div>
-      <Modal
-        title="Search Products"
-        open={open}
-        onCancel={onClose}
-        footer={null}
-        width={600}
-        centered
-      >
-        {/* Search bar */}
-        <div className="mb-4 sticky top-0 z-10 bg-white pb-3">
-          <Input.Search
-            placeholder="Type to search..."
-            allowClear
-            enterButton="Search"
-            size="large"
-            value={searchValue}
-            onChange={(e) => setSearchValue(e.target.value)}
-            onSearch={handleSearch}
-          />
-        </div>
+  
+  const handleProductClick = (id) => {
+    onClose();
+    navigate(`/product/${id}`);
+  };
 
-        {/* Search results */}
-        <div style={{ maxHeight: "400px", overflowY: "auto" }}>
-          {loading ? (
-            <div className="flex justify-center py-10">
-              <Spin tip="Searching..." />
-            </div>
-          ) : results.length > 0 ? (
-            <List
-              itemLayout="horizontal"
-              dataSource={results}
-              renderItem={(item) => (
-                <List.Item>
-                  <List.Item.Meta
-                    title={
-                      <Link to={`/product/${item.id}`} onClick={onClose}>
-                        {item.name}
-                      </Link>
-                    }
-                    description={
-                      <span className="text-gray-600">{item.price}</span>
-                    }
-                  />
-                </List.Item>
-              )}
-            />
-          ) : (
-            <Empty description="No products found" />
-          )}
-        </div>
-      </Modal>
-    </div>
+  // Reset when modal closes
+  useEffect(() => {
+    if (!open) {
+      dispatch(resetSearch());
+    }
+  }, [open, dispatch]);
+
+  return (
+    <Modal
+      title="Search Products"
+      open={open}
+      onCancel={onClose}
+      footer={null}
+      centered
+      className="rounded-xl"
+    >
+      <Input.Search
+        placeholder="Search for products..."
+        enterButton="Search"
+        size="large"
+        value={query}
+        onChange={(e) => handleSearch(e.target.value)}
+        loading={loading}
+      />
+
+      <div className="mt-4">
+        {loading ? (
+          <div className="flex justify-center items-center py-6">
+            <Spin size="large" />
+          </div>
+        ) : (
+          <List
+            itemLayout="horizontal"
+            dataSource={results}
+            locale={{ emptyText: "No products found" }}
+            renderItem={(item) => (
+              <List.Item
+                onClick={() => handleProductClick(item._id)}
+                className="cursor-pointer hover:bg-gray-100 rounded-lg transition"
+              >
+                <List.Item.Meta
+                  avatar={
+                    <img
+                      src={item.productImage?.[0]}
+                      alt={item.productName}
+                      className="w-16 h-16 object-cover rounded-md border"
+                    />
+                  }
+                  title={<span className="font-semibold">{item.productName}</span>}
+                  description={
+                    <div className="text-sm text-gray-600">
+                      <span className="block">{item.productBrand}</span>
+                      <span className="text-[#db4444] font-bold">
+                        ₹{item.salesPrice}
+                      </span>{" "}
+                      <span className="line-through text-gray-400">
+                        ₹{item.productPrice}
+                      </span>
+                    </div>
+                  }
+                />
+              </List.Item>
+            )}
+          />
+        )}
+      </div>
+    </Modal>
   );
 }

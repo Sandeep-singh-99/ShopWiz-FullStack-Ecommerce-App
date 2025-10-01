@@ -7,6 +7,7 @@ import productSlice from "./slice/product-slice";
 import categorySlice from "./slice/category-slice";
 import commentSlice from "./slice/comment-slice";
 import orderSlice from "./slice/order-slice";
+import searchSlice from "./slice/search-slice";
 
 const persistConfig = {
   key: "root",  
@@ -22,6 +23,7 @@ const rootReducer = combineReducers({
   category: categorySlice,
   comment: commentSlice,
   order: orderSlice,
+  search: searchSlice,
 });
 
 
