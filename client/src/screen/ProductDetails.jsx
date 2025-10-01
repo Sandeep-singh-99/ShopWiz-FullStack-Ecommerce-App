@@ -17,45 +17,43 @@ export default function ProductDetails() {
 
   const dispatch = useDispatch();
   const [addComment, setAddComment] = useState("");
-
   const [selectedImage, setSelectedImage] = useState(null);
-
-
 
   const Submithandle = async (e) => {
     e.preventDefault();
-  
+
     if (!id) {
       toast.error("Product ID is missing.");
       return;
     }
-  
+
     if (!addComment.trim()) {
       toast.warning("Please enter a comment before submitting.");
       return;
     }
-  
+
     const data = { comment: addComment };
-  
+
     try {
       const res = await dispatch(AddComment({ id, data })).unwrap();
-      
-      toast.success(res?.message || "Comment added successfully!"); 
-      setAddComment(""); 
-      dispatch(GetComments(id)); 
+      toast.success(res?.message || "Comment added successfully!");
+      setAddComment("");
+      dispatch(GetComments(id));
     } catch (err) {
-      toast.error(err?.message || "Failed to add comment. Please try again."); 
+      toast.error(
+        err?.message || err?.error || "Failed to add comment. Please try again."
+      );
     }
   };
-  
 
   useEffect(() => {
     if (id) {
       dispatch(clearComment());
       dispatch(fetchProductById(id))
         .unwrap()
-        .catch(() => {
-          toast.error("Failed to fetch product.");
+        .catch((err) => {
+          console.error("Product fetch error:", err);
+          toast.error(err?.message || "Failed to fetch product.");
         });
       dispatch(GetComments(id))
         .then((res) => console.log("Fetched Comments:", res.payload))
@@ -72,14 +70,17 @@ export default function ProductDetails() {
   const addToCart = useAddToCart();
 
   if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error}</p>;
+  if (error)
+    return (
+      <p>Error: {error?.message || JSON.stringify(error) || "Unknown error"}</p>
+    );
   if (!product) return <p>No product details available.</p>;
 
   return (
     <>
       <div className="bg-slate-200 py-10 flex justify-center items-center">
         <div className="container mx-auto px-4">
-          <div className="flex flex-wrap  -mx-4">
+          <div className="flex flex-wrap -mx-4">
             {/* Glass Card - Image Section */}
             <div className="w-full md:w-1/2 px-4 mb-8">
               <div className="relative bg-white backdrop-blur-md border border-white/20 shadow-lg rounded-xl p-6">
@@ -204,19 +205,19 @@ export default function ProductDetails() {
                   <div className="flex items-center">
                     <img
                       className="mr-2 w-8 h-8 rounded-full"
-                      src={comment.userId.imageUrl}
-                      alt={comment.userId.username}
+                      src={comment?.userId?.imageUrl || "/default.png"}
+                      alt={comment?.userId?.username || "Anonymous"}
                     />
                     <p className="text-sm text-gray-900 dark:text-white font-semibold">
-                      {comment.userId.username}
+                      {comment?.userId?.username || "Anonymous"}
                     </p>
                   </div>
                   <p className="text-sm text-gray-600 dark:text-gray-400">
-                    <time>{comment.date}</time>
+                    <time>{comment?.date || "Unknown date"}</time>
                   </p>
                 </footer>
                 <p className="text-gray-500 dark:text-gray-400">
-                  {comment.comment}
+                  {comment?.comment || "No comment text"}
                 </p>
               </article>
             ))

@@ -26,7 +26,7 @@ export default function CategoryProduct() {
 
   const handleSort = (option) => {
     setSortOption(option);
-    setIsFilterOpen(false); // Close filter on mobile after selection
+    setIsFilterOpen(false); 
   };
 
   const handleCategorySelection = (category) => {
