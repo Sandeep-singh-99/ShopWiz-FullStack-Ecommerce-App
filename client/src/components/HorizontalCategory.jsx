@@ -50,12 +50,6 @@ export default function HorizontalCategory() {
         <h2 className="text-2xl sm:text-3xl font-bold text-gray-900">
           Explore Categories
         </h2>
-        <button
-          onClick={() => navigate("/categories")}
-          className="text-indigo-600 hover:text-indigo-800 font-medium text-sm transition"
-        >
-          View All →
-        </button>
       </div>
 
       {/* Category Container */}
