@@ -16,6 +16,7 @@ const categoryRouter = require("./router/category-router");
 const commentRouter = require("./router/comment-router");
 const paymentRouter = require("./router/payment-router");
 const orderRouter = require("./router/order-router");
+const searchRouter = require("./router/search-router");
 
 const PORT = process.env.PORT || 5000;
 const numCPUs = os.cpus().length; // Get the number of CPU cores
@@ -67,6 +68,7 @@ if (cluster.isMaster) {
   app.use("/api/comment", commentRouter);
   app.use("/api/payment", paymentRouter);
   app.use("/api/order", orderRouter);
+  app.use("/api", searchRouter);
 
   app.use((err, req, res, next) => {
     console.log("Error: ", err.stack);
