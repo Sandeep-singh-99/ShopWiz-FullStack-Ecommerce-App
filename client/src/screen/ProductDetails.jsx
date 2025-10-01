@@ -9,6 +9,7 @@ import {
   GetComments,
 } from "../redux/slice/comment-slice";
 import useAddToCart from "../helpers/useAddToCart";
+import { Spin } from "antd";
 
 export default function ProductDetails() {
   const { id } = useParams();
@@ -69,7 +70,13 @@ export default function ProductDetails() {
 
   const addToCart = useAddToCart();
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-64">
+        <Spin size="large" tip="Loading products..." />
+      </div>
+    );
+  }
   if (error)
     return (
       <p>Error: {error?.message || JSON.stringify(error) || "Unknown error"}</p>

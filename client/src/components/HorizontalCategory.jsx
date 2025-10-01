@@ -24,7 +24,7 @@ export default function HorizontalCategory() {
     { id: 4, name: "Earphones", img: img4 },
     { id: 5, name: "Mobiles", img: img5 },
     { id: 6, name: "Printers", img: img6 },
-    { id: 7, name: "Processors", img: img7 },
+    { id: 7, name: "Processor", img: img7 },
     { id: 8, name: "Refrigerators", img: img8 },
     { id: 9, name: "Speakers", img: img9 },
     { id: 10, name: "TVs", img: img10 },
