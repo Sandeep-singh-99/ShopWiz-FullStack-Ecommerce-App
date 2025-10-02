@@ -45,11 +45,8 @@ export default function Home() {
         <CarouselView />
 
         {/* Horizontal Categories */}
-        <section className="bg-white py-6 shadow-sm">
+        <section className="bg-white shadow-sm">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-2xl font-bold text-gray-800 mb-6">
-              Shop by Category
-            </h2>
             <HorizontalCategory />
           </div>
         </section>
