@@ -4,9 +4,21 @@ ShopWiz is a powerful and scalable full-stack e-commerce web application built w
 
 ---
 
+
+  <img src="./screenshot/Screenshot%202025-10-02%20090040.png" alt="image1" />
+  <img src="./screenshot/Screenshot%202025-10-02%20090225.png" alt="image2" width="400"/>
+
+
+
+  <img src="./screenshot/Screenshot%202025-10-02%20090858.png" alt="image3" />
+  <img src="./screenshot/Screenshot%202025-10-02%20090918.png" alt="image4" />
+
+
+
 ## ✨ Features
 
 - 🛒 User-friendly e-commerce interface with dynamic product listing and search
+- 🔍 Search products by name, category, and price range with instant results
 - 🔐 JWT-based authentication using HTTP-only cookies and bcrypt
 - 🧑‍💼 Admin panel to manage products and users
 - 📦 Cart and order management with persistent state
@@ -14,9 +26,7 @@ ShopWiz is a powerful and scalable full-stack e-commerce web application built w
 - ☁️ Image uploads via ImageKit (Cloudinary supported too)
 - ⚡ Performance optimized with clustering and Node.js cache
 - 🛡️ Rate limiting and CORS protection for security
-- 📧 Email support via Resend (optional)
 - 🎨 Responsive UI with Ant Design + TailwindCSS
-- 🌙 Dark/Light mode support (via `next-themes`)
 - 📦 Backend APIs with Express and MongoDB
 
 ---
@@ -30,7 +40,7 @@ ShopWiz is a powerful and scalable full-stack e-commerce web application built w
 - **Ant Design** (AntD)
 - **Tailwind CSS**
 - **Axios** (with interceptors)
-- **Next Themes** for Dark/Light mode
+- **Search UI** with filters and Ant Design components
 
 ### 📌 Backend
 - **Node.js**, **Express.js**
@@ -42,6 +52,21 @@ ShopWiz is a powerful and scalable full-stack e-commerce web application built w
 - **Node Cache**, **Express Rate Limit**
 - **CORS**, **Helmet** for security
 - **Cluster** for multi-core performance
+- **Search API** supporting keywords, category filters, and pagination
+
+
+## 🔍 Search Functionality
+
+- Search products by **keywords** (e.g., "iPhone")  
+- Filter by **category, price, and availability**  
+- Pagination for large product lists  
+- Optimized **MongoDB queries with indexes** for faster search  
+
+**Example API endpoint:**
+
+```http
+GET /api/products/search?keyword=iphone&category=electronics&page=1&limit=20
+```
 
 ### ☁️ Services & Env Variables
 ```env
